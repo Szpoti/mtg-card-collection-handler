@@ -3,6 +3,7 @@ import styled from "styled-components";
 import "./App.css";
 import OfflineCardService from "./services/OfflineCardService";
 import LiveCardService from "./services/LiveCardService";
+import { Container, Col, Row } from "react-bootstrap";
 
 const App = (props) => {
   const [loadedCards, setLoadedCards] = useState([]);
@@ -17,28 +18,19 @@ const App = (props) => {
   }, []);
 
   return (
-    <div style={parentDiv}>
-      {loadedCards.map((card) => (
-        <div key={card.multiverseid} style={child}>
-          <p>
-            {card.name}, multiverseid: {card.multiverseid}
-          </p>
-          <img src={card.imageUrl} alt="Missing"></img>
-        </div>
-      ))}
-    </div>
+    <Container>
+      <Row className="d-flex flex-wrap">
+        {loadedCards.map((card) => (
+          <Col key={card.multiverseid} xs={4} md={3} className="p-3">
+            <p>
+              {card.name}, multiverseid: {card.multiverseid}
+            </p>
+            <img src={card.imageUrl} className="img-fluid" alt="Card"></img>
+          </Col>
+        ))}
+      </Row>
+    </Container>
   );
-};
-
-const parentDiv = {
-  display: "flex",
-  flexWrap: "wrap",
-};
-
-const child = {
-  fontSize: "150%",
-  flex: "1 0 21%",
-  margin: "5px",
 };
 
 export default App;
