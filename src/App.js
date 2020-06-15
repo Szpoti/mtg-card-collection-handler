@@ -1,29 +1,19 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import "./App.css";
+import OfflineCardService from "./services/OfflineCardService";
+import LiveCardService from "./services/LiveCardService";
 
 const App = (props) => {
-  const mtg = require("mtgsdk");
-
   const [loadedCards, setLoadedCards] = useState([]);
 
   useEffect(() => {
     console.log("In use effect");
-    mtg.card
-      .where({
-        supertypes: "legendary",
-        subtypes: "demon",
-        types: "creature",
-        colors: "black",
-        page: 0,
-      })
-      .then((cards) => {
-        return cards.filter((card) => card.multiverseid !== undefined);
-      })
-      .then((cards) => {
-        setLoadedCards(cards);
-        console.log(cards);
-      });
+    const cardService = new OfflineCardService();
+    cardService.getAll().then((cards) => {
+      setLoadedCards(cards);
+      console.log(cards);
+    });
   }, []);
 
   return (
