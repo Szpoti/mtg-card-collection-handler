@@ -49,7 +49,37 @@ const App = (props) => {
       </Navbar>
       <Container className="p-3">
         <Row>
-          <Col xs={12} md={6}></Col>
+          <Col xs={12} md={6}>
+            <nav className="d-flex justify-content-center">
+              <ul className="pagination">
+                <li className="page-item disabled">
+                  <a className="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+                <li className="page-item active">
+                  <a className="page-link" href="#">
+                    1
+                  </a>
+                </li>
+                <li className="page-item">
+                  <a className="page-link" href="#">
+                    2
+                  </a>
+                </li>
+                <li className="page-item">
+                  <a className="page-link" href="#">
+                    3
+                  </a>
+                </li>
+                <li className="page-item">
+                  <a className="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </Col>
           <Col xs={12} md={6}>
             <div className="input-group input-focus justify-content-end">
               <input
@@ -76,6 +106,41 @@ const App = (props) => {
               <img src={card.imageUrl} className="img-fluid" alt="Card"></img>
             </Col>
           ))}
+        </Row>
+      </Container>
+      <Container className="p-3">
+        <Row>
+          <Col>
+            <nav className="d-flex justify-content-center">
+              <ul className="pagination">
+                <li className="page-item disabled">
+                  <a className="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+                <li className="page-item active">
+                  <a className="page-link" href="#">
+                    1
+                  </a>
+                </li>
+                <li className="page-item">
+                  <a className="page-link" href="#">
+                    2
+                  </a>
+                </li>
+                <li className="page-item">
+                  <a className="page-link" href="#">
+                    3
+                  </a>
+                </li>
+                <li className="page-item">
+                  <a className="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </Col>
         </Row>
       </Container>
     </div>
