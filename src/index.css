@@ -38,3 +38,15 @@ div.container > a.navbar-brand {
 div.container > a.navbar-brand:hover {
   color: white;
 }
+
+input.search-input {
+  max-width: 200px;
+}
+
+input.search-input:focus {
+  width: 100%;
+}
+
+input.search-input::placeholder {
+  font-style: italic;
+}
