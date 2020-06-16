@@ -19,13 +19,23 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 const App = (props) => {
   const [loadedCards, setLoadedCards] = useState([]);
+  let [cardTitle] = useState(String.empty);
+
+  const setCardTitle = (e) => {
+    cardTitle = e.target.value;
+  };
+
+  const searchForCards = () => {
+    const title = cardTitle;
+  };
 
   useEffect(() => {
     console.log("In use effect");
-    const cardService = new OfflineCardService();
+    const cardService = new LiveCardService();
     cardService.getAll().then((cards) => {
       setLoadedCards(cards);
       console.log(cards);
+      document.getElementById("loader").style.display = "none";
     });
 
     new IntersectionObserver(function (e, o) {
@@ -86,24 +96,28 @@ const App = (props) => {
                 type="search"
                 placeholder="Search by card name ..."
                 className="form-control border-right-0 search-input"
+                value={cardTitle}
+                onChange={setCardTitle}
               />
               <div className="input-group-prepend">
                 <span className="input-group-text bg-white">
-                  <FontAwesomeIcon icon={faSearch} />
+                  <FontAwesomeIcon
+                    icon={faSearch}
+                    onClick={searchForCards.bind()}
+                  />
                 </span>
               </div>
             </div>
           </Col>
         </Row>
       </Container>
+      <div id="loader"></div>
       <Container>
         <Row className="d-flex flex-wrap">
           {loadedCards.map((card) => (
             <Col key={card.multiverseid} xs={4} md={3} className="p-3">
-              <p>
-                {card.name}, multiverseid: {card.multiverseid}
-              </p>
               <img src={card.imageUrl} className="img-fluid" alt="Card"></img>
+              <p>{card.name}</p>
             </Col>
           ))}
         </Row>
