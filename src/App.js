@@ -7,12 +7,7 @@ import Loader from "./components/Loader";
 import {
   Container,
   Col,
-  Button,
-  Form,
-  FormControl,
-  Nav,
   Navbar,
-  NavDropdown,
   Row,
 } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
