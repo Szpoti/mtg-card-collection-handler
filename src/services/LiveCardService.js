@@ -13,6 +13,7 @@ export default class LiveCardService {
         page: 0,
       })
       .then((cards) => {
+        console.log(cards);
         return cards.filter((card) => card.multiverseid !== undefined);
       });
   }
