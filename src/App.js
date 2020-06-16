@@ -3,6 +3,7 @@ import styled from "styled-components";
 import "./App.css";
 import OfflineCardService from "./services/OfflineCardService";
 import LiveCardService from "./services/LiveCardService";
+import Loader from "./components/Loader";
 import {
   Container,
   Col,
@@ -21,27 +22,20 @@ const cardService = new LiveCardService();
 const App = (props) => {
   const [loadedCards, setLoadedCards] = useState([]);
   let [cardTitle] = useState(String.empty);
-  const toggleLoader = () => {
-    const loader = document.getElementById("loader");
-    if (loader.style.display === "none") {
-      loader.style.display = "block";
-    } else {
-      loader.style.display = "none";
-    }
-  };
+  const [isLoading, setIsLoading] = useState(true);
 
   const setCardTitle = (e) => {
     cardTitle = e.target.value;
   };
 
   const searchForCards = () => {
-    setLoadedCards([""]);
-    toggleLoader();
+    setLoadedCards([]);
+    setIsLoading(true);
     const title = cardTitle;
     cardService.search(title, loadCards).then((cards) => {
       setLoadedCards(cards);
       console.log(cards);
-      toggleLoader();
+      setIsLoading(false);
     });
   };
 
@@ -61,7 +55,7 @@ const App = (props) => {
   const loadCards = (cards) => {
     setLoadedCards(cards);
     console.log(cards);
-    toggleLoader();
+    setIsLoading(false);
   };
 
   return (
@@ -131,7 +125,7 @@ const App = (props) => {
           </Col>
         </Row>
       </Container>
-      <div id="loader"></div>
+      <Loader isLoading={isLoading} />
       <Container>
         <Row className="d-flex flex-wrap">
           {loadedCards.map((card) => (
