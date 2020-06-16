@@ -48,8 +48,8 @@ const App = (props) => {
         </Container>
       </Navbar>
       <Container className="p-3">
-        <Row>
-          <Col xs={12} md={6}>
+        <Row className="pt-3">
+          <Col xs={12} md={6} className="order-1 order-md-0">
             <nav className="d-flex justify-content-center">
               <ul className="pagination">
                 <li className="page-item disabled">
@@ -80,8 +80,8 @@ const App = (props) => {
               </ul>
             </nav>
           </Col>
-          <Col xs={12} md={6}>
-            <div className="input-group input-focus justify-content-end">
+          <Col xs={12} md={6} className="order-0 order-md-1 py-3 py-md-0">
+            <div className="input-group input-focus justify-content-center justify-content-md-end">
               <input
                 type="search"
                 placeholder="Search by card name ..."
