@@ -17,6 +17,7 @@ import {
 } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import LoadedCardsDisplayer from "./components/LoadedCardsDisplayer";
 const cardService = new LiveCardService();
 
 const App = (props) => {
@@ -29,18 +30,15 @@ const App = (props) => {
   };
 
   const searchForCards = () => {
+    console.log("Searcing...setting loaded cards to []...");
     setLoadedCards([]);
+    console.log("New loaded cards: ", loadedCards);
     setIsLoading(true);
     const title = cardTitle;
-    cardService.search(title, loadCards).then((cards) => {
-      setLoadedCards(cards);
-      console.log(cards);
-      setIsLoading(false);
-    });
+    cardService.search(title, loadCards);
   };
 
   useEffect(() => {
-    console.log("In use effect");
     cardService.getAll(loadCards);
 
     new IntersectionObserver(function (e, o) {
@@ -53,9 +51,11 @@ const App = (props) => {
   }, []);
 
   const loadCards = (cards) => {
+    console.log("'loadCards': Setting loaded cards: ", cards);
     setLoadedCards(cards);
-    console.log(cards);
+    console.log("'loadCards': Checking value of loadedCards: ", loadedCards);
     setIsLoading(false);
+    console.log("'loadCards': Cards set!\n\n");
   };
 
   return (
@@ -63,7 +63,7 @@ const App = (props) => {
       <span className="position-absolute trigger"></span>
       <Navbar expand="lg" className="sticky-top">
         <Container>
-          <Navbar.Brand href="#" className="mx-auto">
+          <Navbar.Brand href="/" className="mx-auto">
             Magic: The Gathering
           </Navbar.Brand>
         </Container>
@@ -74,27 +74,27 @@ const App = (props) => {
             <nav className="d-flex justify-content-center">
               <ul className="pagination">
                 <li className="page-item disabled">
-                  <a className="page-link" href="#" aria-label="Previous">
+                  <a className="page-link" href="/" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                   </a>
                 </li>
                 <li className="page-item active">
-                  <a className="page-link" href="#">
+                  <a className="page-link" href="/">
                     1
                   </a>
                 </li>
                 <li className="page-item">
-                  <a className="page-link" href="#">
+                  <a className="page-link" href="/">
                     2
                   </a>
                 </li>
                 <li className="page-item">
-                  <a className="page-link" href="#">
+                  <a className="page-link" href="/">
                     3
                   </a>
                 </li>
                 <li className="page-item">
-                  <a className="page-link" href="#" aria-label="Next">
+                  <a className="page-link" href="/" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                   </a>
                 </li>
@@ -115,10 +115,7 @@ const App = (props) => {
                 onClick={searchForCards.bind()}
               >
                 <span className="input-group-text bg-white">
-                  <FontAwesomeIcon
-                    icon={faSearch}
-                    onClick={searchForCards.bind()}
-                  />
+                  <FontAwesomeIcon icon={faSearch} />
                 </span>
               </div>
             </div>
@@ -127,18 +124,7 @@ const App = (props) => {
       </Container>
       <Loader isLoading={isLoading} />
       <Container>
-        <Row className="d-flex flex-wrap">
-          {loadedCards.map((card) => (
-            <Col key={card.multiverseid} xs={4} md={3} className="p-3">
-              <img
-                src={card.image_uris.normal}
-                className="img-fluid zoom"
-                alt="Card"
-              ></img>
-              <p style={{ textAlign: "center" }}>{card.name}</p>
-            </Col>
-          ))}
-        </Row>
+        <LoadedCardsDisplayer loadedCards={loadedCards} />
       </Container>
       <Container className="p-3">
         <Row>
@@ -146,27 +132,27 @@ const App = (props) => {
             <nav className="d-flex justify-content-center">
               <ul className="pagination">
                 <li className="page-item disabled">
-                  <a className="page-link" href="#" aria-label="Previous">
+                  <a className="page-link" href="/" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                   </a>
                 </li>
                 <li className="page-item active">
-                  <a className="page-link" href="#">
+                  <a className="page-link" href="/">
                     1
                   </a>
                 </li>
                 <li className="page-item">
-                  <a className="page-link" href="#">
+                  <a className="page-link" href="/">
                     2
                   </a>
                 </li>
                 <li className="page-item">
-                  <a className="page-link" href="#">
+                  <a className="page-link" href="/">
                     3
                   </a>
                 </li>
                 <li className="page-item">
-                  <a className="page-link" href="#" aria-label="Next">
+                  <a className="page-link" href="/" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                   </a>
                 </li>

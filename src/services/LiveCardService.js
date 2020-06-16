@@ -6,19 +6,36 @@ export default class LiveCardService {
   }
 
   async search(title, callback) {
-    console.log("Searching title: " + title);
+    let cardsToLoad = [];
     await axios
-      .get(encodeURI(`https://api.scryfall.com/cards/search?q=${title}`))
+      .get(encodeURI(`https://api.scryfall.com/catalog/card-names`))
       .then((cards) => {
-        console.log(cards.data.data);
-        callback(cards.data.data);
+        return cards.data.data.filter((cardName) =>
+          cardName.toLowerCase().includes(title.toLowerCase())
+        );
+      })
+      .then((cards) => {
+        console.log("Cards found! Filtering...");
+        cards.forEach(async (cardName) => {
+          let response = await axios.get(
+            `https://api.scryfall.com/cards/named?exact=${cardName}`
+          );
+          cardsToLoad.push(response.data);
+        });
+      })
+      .then(() => {
+        console.log(
+          "Loading finished! Calling 'loadCards' from LiveCardService..."
+        );
+        callback(cardsToLoad);
       });
   }
 
   async getAll(callback) {
-    console.log("In getAll");
+    console.log("Geting all cards with Axios...");
     await axios.get("https://api.scryfall.com/cards?page=1").then((cards) => {
-      console.log(cards.data.data);
+      console.log("Cards arrived. The array is: ", cards.data.data);
+      console.log("\n\n");
       callback(cards.data.data);
     });
   }
