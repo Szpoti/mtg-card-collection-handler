@@ -4,7 +4,7 @@ import { Col, Row } from "react-bootstrap";
 const LoadedCardsDisplayer = (props) => {
   console.log("'loadedCardsDisplayer' invoked!");
   console.log("'loadedCardsDisplayer' props: ", props.loadedCards);
-  if (props.loadedCards !== undefined || props.loadedCards.length >= 0) {
+  if (!props.loadedCards.includes(undefined)) {
     return (
       <Row className="d-flex flex-wrap">
         {props.loadedCards.map((card) => (
