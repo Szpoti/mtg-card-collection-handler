@@ -35,10 +35,10 @@ const App = (props) => {
   };
 
   const searchForCards = () => {
-    setLoadedCards([]);
+    setLoadedCards([""]);
     toggleLoader();
     const title = cardTitle;
-    cardService.search(title).then((cards) => {
+    cardService.search(title, loadCards).then((cards) => {
       setLoadedCards(cards);
       console.log(cards);
       toggleLoader();
@@ -47,11 +47,7 @@ const App = (props) => {
 
   useEffect(() => {
     console.log("In use effect");
-    cardService.getAll().then((cards) => {
-      setLoadedCards(cards);
-      console.log(cards);
-      toggleLoader();
-    });
+    cardService.getAll(loadCards);
 
     new IntersectionObserver(function (e, o) {
       if (e[0].intersectionRatio > 0) {
@@ -61,6 +57,12 @@ const App = (props) => {
       }
     }).observe(document.querySelector(".trigger"));
   }, []);
+
+  const loadCards = (cards) => {
+    setLoadedCards(cards);
+    console.log(cards);
+    toggleLoader();
+  };
 
   return (
     <div>
@@ -135,7 +137,7 @@ const App = (props) => {
           {loadedCards.map((card) => (
             <Col key={card.multiverseid} xs={4} md={3} className="p-3">
               <img
-                src={card.imageUrl}
+                src={card.image_uris.normal}
                 className="img-fluid zoom"
                 alt="Card"
               ></img>
