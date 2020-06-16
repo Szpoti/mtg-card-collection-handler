@@ -13,7 +13,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import LoadedCardsDisplayer from "./components/LoadedCardsDisplayer";
-const cardService = new LiveCardService();
+const cardService = new OfflineCardService();
 
 const App = (props) => {
   const [loadedCards, setLoadedCards] = useState([]);
@@ -24,11 +24,13 @@ const App = (props) => {
     cardTitle = e.target.value;
   };
 
-  const searchForCards = () => {
+  const searchForCards = async () => {
     setLoadedCards([]);
     setIsLoading(true);
     const title = cardTitle;
-    cardService.search(title, loadCards);
+    const cards = await cardService.search(title);
+    setLoadedCards(cards);
+    setIsLoading(false);
   };
 
   useEffect(() => {

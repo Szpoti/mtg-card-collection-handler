@@ -8,7 +8,7 @@ const LoadedCardsDisplayer = (props) => {
         {props.loadedCards.map((card) => (
           <Col key={card.id} xs={4} md={3} className="p-3">
             <img
-              src={card.image_uris.normal}
+              src={(card.image_uris === undefined ? '' : card.image_uris.normal)}
               className="img-fluid zoom"
               alt="Card"
             ></img>

@@ -5,25 +5,25 @@ export default class LiveCardService {
     this.mtg = require("mtgsdk");
   }
 
-  async search(title, callback) {
-    let cardsToLoad = [];
-    await axios
+  search(title) {
+    return axios
       .get(encodeURI(`https://api.scryfall.com/catalog/card-names`))
       .then((cards) => {
         return cards.data.data.filter((cardName) =>
           cardName.toLowerCase().includes(title.toLowerCase())
         );
       })
-      .then((cards) => {
-        cards.forEach(async (cardName) => {
-          let response = await axios.get(
+      .then(async (cards) => {
+        const cardsToLoad = [];
+        const promises = cards.map(cardName => {
+          return axios.get(
             `https://api.scryfall.com/cards/named?exact=${cardName}`
-          );
-          cardsToLoad.push(response.data);
+          ).then(response => {
+            cardsToLoad.push(response.data);
+          });
         });
-      })
-      .then(() => {
-        callback(cardsToLoad);
+        await Promise.all(promises);
+        return cardsToLoad;
       });
   }
 
