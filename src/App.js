@@ -22,6 +22,7 @@ const App = (props) => {
   const [loadedCards, setLoadedCards] = useState([]);
   let [cardTitle] = useState(String.empty);
 
+<<<<<<< HEAD
   const toggleLoader = () => {
     const loader = document.getElementById("loader");
     if (loader.style.display === "none") {
@@ -31,11 +32,14 @@ const App = (props) => {
     }
   };
 
+=======
+>>>>>>> 36a7e26ccdbe87023eff78f1aaad6187d38e2bb2
   const setCardTitle = (e) => {
     cardTitle = e.target.value;
   };
 
   const searchForCards = () => {
+<<<<<<< HEAD
     setLoadedCards([]);
     toggleLoader();
     const title = cardTitle;
@@ -44,14 +48,25 @@ const App = (props) => {
       console.log(cards);
       toggleLoader();
     });
+=======
+    const title = cardTitle;
+>>>>>>> 36a7e26ccdbe87023eff78f1aaad6187d38e2bb2
   };
 
   useEffect(() => {
     console.log("In use effect");
+<<<<<<< HEAD
     cardService.getAll().then((cards) => {
       setLoadedCards(cards);
       console.log(cards);
       toggleLoader();
+=======
+    const cardService = new LiveCardService();
+    cardService.getAll().then((cards) => {
+      setLoadedCards(cards);
+      console.log(cards);
+      document.getElementById("loader").style.display = "none";
+>>>>>>> 36a7e26ccdbe87023eff78f1aaad6187d38e2bb2
     });
 
     new IntersectionObserver(function (e, o) {
@@ -120,7 +135,10 @@ const App = (props) => {
                 onClick={searchForCards.bind()}
               >
                 <span className="input-group-text bg-white">
-                  <FontAwesomeIcon icon={faSearch} />
+                  <FontAwesomeIcon
+                    icon={faSearch}
+                    onClick={searchForCards.bind()}
+                  />
                 </span>
               </div>
             </div>
@@ -132,12 +150,17 @@ const App = (props) => {
         <Row className="d-flex flex-wrap">
           {loadedCards.map((card) => (
             <Col key={card.multiverseid} xs={4} md={3} className="p-3">
+<<<<<<< HEAD
               <img
                 src={card.imageUrl}
                 className="img-fluid zoom"
                 alt="Card"
               ></img>
               <p style={{ textAlign: "center" }}>{card.name}</p>
+=======
+              <img src={card.imageUrl} className="img-fluid" alt="Card"></img>
+              <p>{card.name}</p>
+>>>>>>> 36a7e26ccdbe87023eff78f1aaad6187d38e2bb2
             </Col>
           ))}
         </Row>
