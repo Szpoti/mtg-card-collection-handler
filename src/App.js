@@ -30,9 +30,7 @@ const App = (props) => {
   };
 
   const searchForCards = () => {
-    console.log("Searcing...setting loaded cards to []...");
     setLoadedCards([]);
-    console.log("New loaded cards: ", loadedCards);
     setIsLoading(true);
     const title = cardTitle;
     cardService.search(title, loadCards);
@@ -51,11 +49,8 @@ const App = (props) => {
   }, []);
 
   const loadCards = (cards) => {
-    console.log("'loadCards': Setting loaded cards: ", cards);
     setLoadedCards(cards);
-    console.log("'loadCards': Checking value of loadedCards: ", loadedCards);
     setIsLoading(false);
-    console.log("'loadCards': Cards set!\n\n");
   };
 
   return (

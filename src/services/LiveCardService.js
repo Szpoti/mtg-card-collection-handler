@@ -15,7 +15,6 @@ export default class LiveCardService {
         );
       })
       .then((cards) => {
-        console.log("Cards found! Filtering...");
         cards.forEach(async (cardName) => {
           let response = await axios.get(
             `https://api.scryfall.com/cards/named?exact=${cardName}`
@@ -24,18 +23,12 @@ export default class LiveCardService {
         });
       })
       .then(() => {
-        console.log(
-          "Loading finished! Calling 'loadCards' from LiveCardService..."
-        );
         callback(cardsToLoad);
       });
   }
 
   async getAll(callback) {
-    console.log("Geting all cards with Axios...");
     await axios.get("https://api.scryfall.com/cards?page=1").then((cards) => {
-      console.log("Cards arrived. The array is: ", cards.data.data);
-      console.log("\n\n");
       callback(cards.data.data);
     });
   }
