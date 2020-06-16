@@ -51,9 +51,9 @@ const App = (props) => {
   }, []);
 
   const loadCards = (cards) => {
-    console.log("'loadCards': Setting loaded cards: ", cards);
+    console.log("'loadCards': Setting loaded cards: " + cards);
     setLoadedCards(cards);
-    console.log("'loadCards': Checking value of loadedCards: ", loadedCards);
+    console.log("'loadCards': Checking value of loadedCards: " + loadedCards);
     setIsLoading(false);
     console.log("'loadCards': Cards set!\n\n");
   };
@@ -110,10 +110,7 @@ const App = (props) => {
                 value={cardTitle}
                 onChange={setCardTitle}
               />
-              <div
-                className="input-group-prepend"
-                onClick={searchForCards.bind()}
-              >
+              <div className="input-group-prepend" onClick={searchForCards}>
                 <span className="input-group-text bg-white">
                   <FontAwesomeIcon icon={faSearch} />
                 </span>

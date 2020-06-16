@@ -14,20 +14,28 @@ export default class LiveCardService {
           cardName.toLowerCase().includes(title.toLowerCase())
         );
       })
-      .then((cards) => {
+      .then(async (cards) => {
         console.log("Cards found! Filtering...");
-        cards.forEach(async (cardName) => {
-          let response = await axios.get(
-            `https://api.scryfall.com/cards/named?exact=${cardName}`
-          );
-          cardsToLoad.push(response.data);
+        console.log("Begginging foreach...");
+        cards.forEach((cardName) => {
+          console.log("Api fetch, getting: " + cardName);
+          axios
+            .get(`https://api.scryfall.com/cards/named?exact=${cardName}`)
+            .then((cardData) => {
+              console.log(
+                "Api fetch finished for " +
+                  cardData.data.name +
+                  ", pushing into cardsToLoad..."
+              );
+              cardsToLoad.push(cardData.data);
+              console.log("cardsToLoad: ", cardsToLoad);
+            })
+            .then(() => {
+              console.log("Calling callback from LiveCardService.");
+              callback(cardsToLoad);
+            });
+          console.log("After api fetch, getting: " + cardName);
         });
-      })
-      .then(() => {
-        console.log(
-          "Loading finished! Calling 'loadCards' from LiveCardService..."
-        );
-        callback(cardsToLoad);
       });
   }
 
