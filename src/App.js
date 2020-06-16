@@ -4,17 +4,7 @@ import "./App.css";
 import OfflineCardService from "./services/OfflineCardService";
 import LiveCardService from "./services/LiveCardService";
 import Loader from "./components/Loader";
-import {
-  Container,
-  Col,
-  Button,
-  Form,
-  FormControl,
-  Nav,
-  Navbar,
-  NavDropdown,
-  Row,
-} from "react-bootstrap";
+import { Container, Col, Navbar, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import LoadedCardsDisplayer from "./components/LoadedCardsDisplayer";
@@ -29,39 +19,13 @@ const App = (props) => {
     cardTitle = e.target.value;
   };
 
-  const searchForCards = () => {
-    console.log("Searcing...setting loaded cards to []...");
+  const searchForCards = async () => {
     setLoadedCards([]);
-    console.log("New loaded cards: ", loadedCards);
     setIsLoading(true);
     const title = cardTitle;
-    console.log("Search for cards with " + cardTitle);
-    cardService.search(title, setSearchedCards);
-    console.log("-After search-");
-  };
-
-  const setSearchedCards = (cardNames) => {
-    let cardsToAdd = [];
-    console.log("cardnames: ", cardNames);
-
-    Promise.all(
-      cardNames.map(function (cardName) {
-        let result = cardService.searchExact(cardName);
-        console.log(result);
-        return result;
-      })
-    )
-      .then(async (resolvedValues) => {
-        console.log("Resolved values: ", resolvedValues);
-        resolvedValues.forEach((value) => {
-          cardsToAdd.push(value);
-        });
-        return cardsToAdd;
-      })
-      .then((cardsToAdd) => {
-        setLoadedCards(cardsToAdd);
-        setIsLoading(false);
-      });
+    const cards = await cardService.search(title);
+    setLoadedCards(cards);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -77,11 +41,8 @@ const App = (props) => {
   }, []);
 
   const loadCards = (cards) => {
-    console.log("'loadCards': Setting loaded cards: " + cards);
     setLoadedCards(cards);
-    console.log("'loadCards': Checking value of loadedCards: " + loadedCards);
     setIsLoading(false);
-    console.log("'loadCards': Cards set!\n\n");
   };
 
   return (

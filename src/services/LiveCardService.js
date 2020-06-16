@@ -5,36 +5,34 @@ export default class LiveCardService {
     this.mtg = require("mtgsdk");
   }
 
-  search(title, callback) {
-    this.cardsToAdd = [];
-    axios
-      .get(encodeURI(`https://api.scryfall.com/catalog/card-names`))
+  search(title) {
+    return axios
+      .get(`https://api.scryfall.com/catalog/card-names`)
       .then((cards) => {
-        callback(
-          cards.data.data.filter((cardName) =>
-            cardName.toLowerCase().includes(title.toLowerCase())
-          )
+        return cards.data.data.filter((cardName) =>
+          cardName.toLowerCase().includes(title.toLowerCase())
         );
-        return cards;
-      });
-  }
-
-  async searchExact(cardName) {
-    console.log("Api fetch, getting: " + cardName);
-    await axios
-      .get(`https://api.scryfall.com/cards/named?exact=${cardName}`)
-      .then((cardData) => {
-        console.log("Card data: ", cardData.data);
-        let data = cardData.data;
-        return data;
+      })
+      .then(async (cards) => {
+        const cardsToLoad = [];
+        const promises = cards.map((cardName) => {
+          return axios
+            .get(
+              encodeURI(
+                `https://api.scryfall.com/cards/named?exact=${cardName}`
+              )
+            )
+            .then((response) => {
+              cardsToLoad.push(response.data);
+            });
+        });
+        await Promise.all(promises);
+        return cardsToLoad;
       });
   }
 
   async getAll(callback) {
-    console.log("Geting all cards with Axios...");
     await axios.get("https://api.scryfall.com/cards?page=1").then((cards) => {
-      console.log("Cards arrived. The array is: ", cards.data.data);
-      console.log("\n\n");
       callback(cards.data.data);
     });
   }
