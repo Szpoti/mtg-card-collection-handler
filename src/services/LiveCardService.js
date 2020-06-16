@@ -3,6 +3,16 @@ export default class LiveCardService {
     this.mtg = require("mtgsdk");
   }
 
+  search(title) {
+    return this.mtg.card
+      .where({
+        name: `${title}`,
+      })
+      .then((cards) => {
+        return cards.filter((card) => card.multiverseid !== undefined);
+      });
+  }
+
   getAll() {
     return this.mtg.card
       .where({

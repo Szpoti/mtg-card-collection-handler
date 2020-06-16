@@ -16,26 +16,42 @@ import {
 } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+const cardService = new LiveCardService();
 
 const App = (props) => {
   const [loadedCards, setLoadedCards] = useState([]);
   let [cardTitle] = useState(String.empty);
+
+  const toggleLoader = () => {
+    const loader = document.getElementById("loader");
+    if (loader.style.display === "none") {
+      loader.style.display = "block";
+    } else {
+      loader.style.display = "none";
+    }
+  };
 
   const setCardTitle = (e) => {
     cardTitle = e.target.value;
   };
 
   const searchForCards = () => {
+    setLoadedCards([]);
+    toggleLoader();
     const title = cardTitle;
+    cardService.search(title).then((cards) => {
+      setLoadedCards(cards);
+      console.log(cards);
+      toggleLoader();
+    });
   };
 
   useEffect(() => {
     console.log("In use effect");
-    const cardService = new LiveCardService();
     cardService.getAll().then((cards) => {
       setLoadedCards(cards);
       console.log(cards);
-      document.getElementById("loader").style.display = "none";
+      toggleLoader();
     });
 
     new IntersectionObserver(function (e, o) {
@@ -99,12 +115,12 @@ const App = (props) => {
                 value={cardTitle}
                 onChange={setCardTitle}
               />
-              <div className="input-group-prepend">
+              <div
+                className="input-group-prepend"
+                onClick={searchForCards.bind()}
+              >
                 <span className="input-group-text bg-white">
-                  <FontAwesomeIcon
-                    icon={faSearch}
-                    onClick={searchForCards.bind()}
-                  />
+                  <FontAwesomeIcon icon={faSearch} />
                 </span>
               </div>
             </div>
@@ -116,8 +132,12 @@ const App = (props) => {
         <Row className="d-flex flex-wrap">
           {loadedCards.map((card) => (
             <Col key={card.multiverseid} xs={4} md={3} className="p-3">
-              <img src={card.imageUrl} className="img-fluid" alt="Card"></img>
-              <p>{card.name}</p>
+              <img
+                src={card.imageUrl}
+                className="img-fluid zoom"
+                alt="Card"
+              ></img>
+              <p style={{ textAlign: "center" }}>{card.name}</p>
             </Col>
           ))}
         </Row>
