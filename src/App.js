@@ -12,20 +12,45 @@ const cardService = new LiveCardService();
 
 const App = (props) => {
   const [loadedCards, setLoadedCards] = useState([]);
-  let [cardTitle] = useState(String.empty);
+  let [cardTitle, setCardTitleState] = useState(String.empty);
   const [isLoading, setIsLoading] = useState(true);
 
   const setCardTitle = (e) => {
-    cardTitle = e.target.value;
+    setCardTitleState(e.target.value);
   };
 
   const searchForCards = async () => {
-    setLoadedCards([]);
-    setIsLoading(true);
-    const title = cardTitle;
-    const cards = await cardService.search(title);
-    setLoadedCards(cards);
-    setIsLoading(false);
+    if (cardTitle !== undefined && cardTitle.length > 2) {
+      handleSearchBarProperties("off");
+      setLoadedCards([]);
+      setIsLoading(true);
+      const title = cardTitle;
+      const cards = await cardService.search(title);
+      setLoadedCards(cards);
+      setIsLoading(false);
+    } else {
+      handleSearchBarProperties("on");
+    }
+  };
+
+  const handleSearchBarProperties = (turnTo) => {
+    switch (turnTo) {
+      case "on":
+        document.getElementById("searchBar").style.borderColor = "red";
+        document.getElementById("searchBarErrorMsg").innerHTML =
+          "Please input at least 3 characters to search for";
+        break;
+      case "off":
+        document.getElementById("searchBar").style.borderColor = "";
+        document.getElementById("searchBarErrorMsg").innerHTML = "";
+        break;
+      default:
+        console.log(
+          "Invalid value for 'turnTo'. Should have been 'on' or 'off', but was ",
+          turnTo
+        );
+        break;
+    }
   };
 
   useEffect(() => {
@@ -91,6 +116,7 @@ const App = (props) => {
           <Col xs={12} md={6} className="order-0 order-md-1 py-3 py-md-0">
             <div className="input-group input-focus justify-content-center justify-content-md-end">
               <input
+                id="searchBar"
                 type="search"
                 placeholder="Search by card name ..."
                 className="form-control border-right-0 search-input"
@@ -103,6 +129,7 @@ const App = (props) => {
                 </span>
               </div>
             </div>
+            <p id="searchBarErrorMsg"></p>
           </Col>
         </Row>
       </Container>
