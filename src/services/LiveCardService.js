@@ -18,9 +18,9 @@ export default class LiveCardService {
         const promises = cards.map((cardName) => {
           return axios
             .get(
-              encodeURI(
-                `https://api.scryfall.com/cards/named?exact=${cardName}`
-              )
+              `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(
+                cardName
+              )}`
             )
             .then((response) => {
               cardsToLoad.push(response.data);
