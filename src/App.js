@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Router, Route } from "react";
 import styled from "styled-components";
 import "./App.css";
 import OfflineCardService from "./services/OfflineCardService";
@@ -8,6 +8,7 @@ import { Container, Col, Navbar, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import LoadedCardsDisplayer from "./components/LoadedCardsDisplayer";
+import Header from "./components/Header";
 const cardService = new LiveCardService();
 
 const App = (props) => {
@@ -72,14 +73,7 @@ const App = (props) => {
 
   return (
     <div>
-      <span className="position-absolute trigger"></span>
-      <Navbar expand="lg" className="sticky-top">
-        <Container>
-          <Navbar.Brand href="/" className="mx-auto">
-            Magic: The Gathering
-          </Navbar.Brand>
-        </Container>
-      </Navbar>
+      <Header />
       <Container className="p-3">
         <Row className="pt-3">
           <Col xs={12} md={6} className="order-1 order-md-0">
