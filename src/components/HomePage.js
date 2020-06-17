@@ -4,11 +4,13 @@ import { Container, Col, Row } from "react-bootstrap";
 import LoadedCardsDisplayer from "./LoadedCardsDisplayer";
 import Pagination from "./Pagination";
 import Search from "./Search";
+import Filter from "./Filter";
 
 const HomePage = (props) => {
   const cardService = props.cardService;
   const [loadedCards, setLoadedCards] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [colors, setColors] = useState([]);
 
   useEffect(() => {
     cardService.getAll(loadCards);
@@ -25,6 +27,17 @@ const HomePage = (props) => {
   const loadCards = (cards) => {
     setLoadedCards(cards);
     setIsLoading(false);
+  };
+
+  const handleColorCheck = (e) => {
+    if (e.target.checked) {
+      setColors([...colors, e.target.value]);
+    } else {
+      const index = colors.indexOf(e.target.value);
+      if (index > -1) {
+        setColors(colors.splice(index, 1));
+      }
+    }
   };
 
   return (
@@ -46,6 +59,7 @@ const HomePage = (props) => {
       </Container>
       <Loader isLoading={isLoading} />
       <Container>
+        <Filter handleColorCheck={handleColorCheck} />
         <LoadedCardsDisplayer loadedCards={loadedCards} />
       </Container>
       <Container className="p-3">
