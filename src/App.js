@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import LoadedCardsDisplayer from "./components/LoadedCardsDisplayer";
 import Header from "./components/Header";
+import Pagination from "./components/Pagination";
 const cardService = new LiveCardService();
 
 const App = (props) => {
@@ -77,35 +78,7 @@ const App = (props) => {
       <Container className="p-3">
         <Row className="pt-3">
           <Col xs={12} md={6} className="order-1 order-md-0">
-            <nav className="d-flex justify-content-center">
-              <ul className="pagination">
-                <li className="page-item disabled">
-                  <a className="page-link" href="/" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                  </a>
-                </li>
-                <li className="page-item active">
-                  <a className="page-link" href="/">
-                    1
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="/">
-                    2
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="/">
-                    3
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="/" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
+            <Pagination />
           </Col>
           <Col xs={12} md={6} className="order-0 order-md-1 py-3 py-md-0">
             <div className="input-group input-focus justify-content-center justify-content-md-end">
@@ -134,35 +107,7 @@ const App = (props) => {
       <Container className="p-3">
         <Row>
           <Col>
-            <nav className="d-flex justify-content-center">
-              <ul className="pagination">
-                <li className="page-item disabled">
-                  <a className="page-link" href="/" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                  </a>
-                </li>
-                <li className="page-item active">
-                  <a className="page-link" href="/">
-                    1
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="/">
-                    2
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="/">
-                    3
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="/" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
+            <Pagination />
           </Col>
         </Row>
       </Container>
