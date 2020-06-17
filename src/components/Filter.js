@@ -1,7 +1,20 @@
-import React from "react";
-import { noAuto } from "@fortawesome/fontawesome-svg-core";
+import React, { useState, useContext } from "react";
+import { ColorContext } from "./ColorProvider";
 
 const Filter = (props) => {
+  const [colors, setColors] = useContext(ColorContext);
+
+  const handleColorCheck = (e) => {
+    if (e.target.checked) {
+      setColors([...colors, e.target.value]);
+      props.setHomeColors([...colors, e.target.value]);
+    } else {
+      setColors(colors.filter((color) => color !== e.target.value));
+      props.setHomeColors(colors.filter((color) => color !== e.target.value));
+    }
+    console.log("Colors: ", colors);
+  };
+
   const manaStyle = {
     width: "3%",
     height: "auto",
@@ -13,8 +26,8 @@ const Filter = (props) => {
         <h5>Colors</h5>
         <input
           type="checkbox"
-          value="black"
-          onClick={props.handleColorCheck.bind(this)}
+          value="B"
+          onClick={handleColorCheck.bind(this)}
         ></input>{" "}
         Black
         <img
@@ -25,8 +38,8 @@ const Filter = (props) => {
         <br />
         <input
           type="checkbox"
-          value="white"
-          onClick={props.handleColorCheck.bind(this)}
+          value="W"
+          onClick={handleColorCheck.bind(this)}
         ></input>{" "}
         White
         <img
@@ -37,8 +50,8 @@ const Filter = (props) => {
         <br />
         <input
           type="checkbox"
-          value="blue"
-          onClick={props.handleColorCheck.bind(this)}
+          value="U"
+          onClick={handleColorCheck.bind(this)}
         ></input>{" "}
         Blue
         <img
@@ -49,8 +62,8 @@ const Filter = (props) => {
         <br />
         <input
           type="checkbox"
-          value="red"
-          onClick={props.handleColorCheck.bind(this)}
+          value="R"
+          onClick={handleColorCheck.bind(this)}
         ></input>{" "}
         Red
         <img
@@ -61,8 +74,8 @@ const Filter = (props) => {
         <br />
         <input
           type="checkbox"
-          value="green"
-          onClick={props.handleColorCheck.bind(this)}
+          value="G"
+          onClick={handleColorCheck.bind(this)}
         ></input>{" "}
         Green
         <img
@@ -75,4 +88,5 @@ const Filter = (props) => {
     </div>
   );
 };
+
 export default Filter;
