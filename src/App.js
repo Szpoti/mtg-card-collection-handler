@@ -3,30 +3,33 @@ import styled from "styled-components";
 import "./App.css";
 import OfflineCardService from "./services/OfflineCardService";
 import LiveCardService from "./services/LiveCardService";
-import {
-  Container,
-  Col,
-  Button,
-  Form,
-  FormControl,
-  Nav,
-  Navbar,
-  NavDropdown,
-  Row,
-} from "react-bootstrap";
+import Loader from "./components/Loader";
+import { Container, Col, Navbar, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import LoadedCardsDisplayer from "./components/LoadedCardsDisplayer";
+const cardService = new LiveCardService();
 
 const App = (props) => {
   const [loadedCards, setLoadedCards] = useState([]);
+  let [cardTitle] = useState(String.empty);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const setCardTitle = (e) => {
+    cardTitle = e.target.value;
+  };
+
+  const searchForCards = async () => {
+    setLoadedCards([]);
+    setIsLoading(true);
+    const title = cardTitle;
+    const cards = await cardService.search(title);
+    setLoadedCards(cards);
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    console.log("In use effect");
-    const cardService = new OfflineCardService();
-    cardService.getAll().then((cards) => {
-      setLoadedCards(cards);
-      console.log(cards);
-    });
+    cardService.getAll(loadCards);
 
     new IntersectionObserver(function (e, o) {
       if (e[0].intersectionRatio > 0) {
@@ -37,12 +40,17 @@ const App = (props) => {
     }).observe(document.querySelector(".trigger"));
   }, []);
 
+  const loadCards = (cards) => {
+    setLoadedCards(cards);
+    setIsLoading(false);
+  };
+
   return (
     <div>
       <span className="position-absolute trigger"></span>
       <Navbar expand="lg" className="sticky-top">
         <Container>
-          <Navbar.Brand href="#" className="mx-auto">
+          <Navbar.Brand href="/" className="mx-auto">
             Magic: The Gathering
           </Navbar.Brand>
         </Container>
@@ -53,27 +61,27 @@ const App = (props) => {
             <nav className="d-flex justify-content-center">
               <ul className="pagination">
                 <li className="page-item disabled">
-                  <a className="page-link" href="#" aria-label="Previous">
+                  <a className="page-link" href="/" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                   </a>
                 </li>
                 <li className="page-item active">
-                  <a className="page-link" href="#">
+                  <a className="page-link" href="/">
                     1
                   </a>
                 </li>
                 <li className="page-item">
-                  <a className="page-link" href="#">
+                  <a className="page-link" href="/">
                     2
                   </a>
                 </li>
                 <li className="page-item">
-                  <a className="page-link" href="#">
+                  <a className="page-link" href="/">
                     3
                   </a>
                 </li>
                 <li className="page-item">
-                  <a className="page-link" href="#" aria-label="Next">
+                  <a className="page-link" href="/" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                   </a>
                 </li>
@@ -86,8 +94,10 @@ const App = (props) => {
                 type="search"
                 placeholder="Search by card name ..."
                 className="form-control border-right-0 search-input"
+                value={cardTitle}
+                onChange={setCardTitle}
               />
-              <div className="input-group-prepend">
+              <div className="input-group-prepend" onClick={searchForCards}>
                 <span className="input-group-text bg-white">
                   <FontAwesomeIcon icon={faSearch} />
                 </span>
@@ -96,17 +106,9 @@ const App = (props) => {
           </Col>
         </Row>
       </Container>
+      <Loader isLoading={isLoading} />
       <Container>
-        <Row className="d-flex flex-wrap">
-          {loadedCards.map((card) => (
-            <Col key={card.multiverseid} xs={4} md={3} className="p-3">
-              <p>
-                {card.name}, multiverseid: {card.multiverseid}
-              </p>
-              <img src={card.imageUrl} className="img-fluid" alt="Card"></img>
-            </Col>
-          ))}
-        </Row>
+        <LoadedCardsDisplayer loadedCards={loadedCards} />
       </Container>
       <Container className="p-3">
         <Row>
@@ -114,27 +116,27 @@ const App = (props) => {
             <nav className="d-flex justify-content-center">
               <ul className="pagination">
                 <li className="page-item disabled">
-                  <a className="page-link" href="#" aria-label="Previous">
+                  <a className="page-link" href="/" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                   </a>
                 </li>
                 <li className="page-item active">
-                  <a className="page-link" href="#">
+                  <a className="page-link" href="/">
                     1
                   </a>
                 </li>
                 <li className="page-item">
-                  <a className="page-link" href="#">
+                  <a className="page-link" href="/">
                     2
                   </a>
                 </li>
                 <li className="page-item">
-                  <a className="page-link" href="#">
+                  <a className="page-link" href="/">
                     3
                   </a>
                 </li>
                 <li className="page-item">
-                  <a className="page-link" href="#" aria-label="Next">
+                  <a className="page-link" href="/" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                   </a>
                 </li>
