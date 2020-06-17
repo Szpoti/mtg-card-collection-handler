@@ -1,54 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Loader from "./Loader";
 import { Container, Col, Row } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import LoadedCardsDisplayer from "./LoadedCardsDisplayer";
 import Pagination from "./Pagination";
+import Search from "./Search";
 
 const HomePage = (props) => {
   const cardService = props.cardService;
   const [loadedCards, setLoadedCards] = useState([]);
-  let [cardTitle, setCardTitleState] = useState(String.empty);
   const [isLoading, setIsLoading] = useState(true);
-
-  const setCardTitle = (e) => {
-    setCardTitleState(e.target.value);
-  };
-
-  const searchForCards = async () => {
-    if (cardTitle !== undefined && cardTitle.length > 2) {
-      handleSearchBarProperties("off");
-      setLoadedCards([]);
-      setIsLoading(true);
-      const title = cardTitle;
-      const cards = await cardService.search(title);
-      setLoadedCards(cards);
-      setIsLoading(false);
-    } else {
-      handleSearchBarProperties("on");
-    }
-  };
-
-  const handleSearchBarProperties = (turnTo) => {
-    switch (turnTo) {
-      case "on":
-        document.getElementById("searchBar").style.borderColor = "red";
-        document.getElementById("searchBarErrorMsg").innerHTML =
-          "Please input at least 3 characters to search for";
-        break;
-      case "off":
-        document.getElementById("searchBar").style.borderColor = "";
-        document.getElementById("searchBarErrorMsg").innerHTML = "";
-        break;
-      default:
-        console.log(
-          "Invalid value for 'turnTo'. Should have been 'on' or 'off', but was ",
-          turnTo
-        );
-        break;
-    }
-  };
 
   useEffect(() => {
     cardService.getAll(loadCards);
@@ -66,6 +26,7 @@ const HomePage = (props) => {
     setLoadedCards(cards);
     setIsLoading(false);
   };
+
   return (
     <Container>
       <Container className="p-3">
@@ -74,21 +35,11 @@ const HomePage = (props) => {
             <Pagination />
           </Col>
           <Col xs={12} md={6} className="order-0 order-md-1 py-3 py-md-0">
-            <div className="input-group input-focus justify-content-center justify-content-md-end">
-              <input
-                id="searchBar"
-                type="search"
-                placeholder="Search by card name ..."
-                className="form-control border-right-0 search-input"
-                value={cardTitle}
-                onChange={setCardTitle}
-              />
-              <div className="input-group-prepend" onClick={searchForCards}>
-                <span className="input-group-text bg-white">
-                  <FontAwesomeIcon icon={faSearch} />
-                </span>
-              </div>
-            </div>
+            <Search
+              cardService={cardService}
+              setLoadedCards={setLoadedCards}
+              setIsLoading={setIsLoading}
+            />
             <p id="searchBarErrorMsg"></p>
           </Col>
         </Row>
