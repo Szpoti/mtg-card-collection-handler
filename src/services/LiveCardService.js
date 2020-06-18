@@ -20,6 +20,14 @@ export default class LiveCardService {
     return cardsToReturn;
   }
 
+  async getOtherPrints(url) {
+    const prints = [];
+    await axios.get(url).then((cards) => {
+      cards.data.data.map((card) => prints.push(card));
+    });
+    return prints;
+  }
+
   search(title) {
     return axios
       .get(`https://api.scryfall.com/catalog/card-names`)

@@ -83,10 +83,9 @@ const HomePage = (props) => {
 
       {loadedCards.map((card) => (
         <Route
-          exact
           key={card.id}
           path={`/${card.name}/${card.id}`}
-          render={() => (
+          render={(props) => (
             <React.Fragment>
               <DetailedCard card={card}></DetailedCard>
             </React.Fragment>
