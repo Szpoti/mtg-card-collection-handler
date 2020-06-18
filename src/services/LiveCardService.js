@@ -1,10 +1,6 @@
 import axios from "axios";
 
 export default class LiveCardService {
-  constructor() {
-    this.mtg = require("mtgsdk");
-  }
-
   useFilter(cards, colors) {
     if (colors.length <= 0) {
       return cards;
