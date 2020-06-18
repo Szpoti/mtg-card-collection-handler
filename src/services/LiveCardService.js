@@ -48,7 +48,6 @@ export default class LiveCardService {
 
   async getAll(callback) {
     await axios.get("https://api.scryfall.com/cards?page=1").then((cards) => {
-      cards.data.data.map((card) => console.log(card));
       callback(cards.data.data);
     });
   }

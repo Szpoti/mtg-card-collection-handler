@@ -37,7 +37,7 @@ const Filter = (props) => {
               id={"color-" + cardColor.name}
               className="mr-1"
             ></input>
-            <label for={`color-${cardColor.name}`}>
+            <label htmlFor={`color-${cardColor.name}`}>
               {cardColor.name}
               <img
                 src={
