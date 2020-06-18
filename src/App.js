@@ -1,4 +1,5 @@
 import React from "react";
+import { BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
 import OfflineCardService from "./services/OfflineCardService";
 import LiveCardService from "./services/LiveCardService";
@@ -9,8 +10,10 @@ const App = (props) => {
   const cardService = new LiveCardService();
   return (
     <div>
-      <Header />
-      <HomePage cardService={cardService} />
+      <Router>
+        <Header />
+        <HomePage cardService={cardService} />
+      </Router>
     </div>
   );
 };

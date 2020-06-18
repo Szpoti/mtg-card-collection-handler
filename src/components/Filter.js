@@ -26,7 +26,10 @@ const Filter = (props) => {
     <div className="text-center text-md-right mt-3">
       {cardColors.map((cardColor) => {
         return (
-          <span className="ml-1 align-middle text-nowrap">
+          <span
+            key={`${cardColor.id}-${cardColor.name}`}
+            className="ml-1 align-middle text-nowrap"
+          >
             <input
               type="checkbox"
               value={cardColor.id}

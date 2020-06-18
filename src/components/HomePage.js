@@ -33,7 +33,7 @@ const HomePage = (props) => {
   };
 
   return (
-    <Router>
+    <div>
       <Route
         exact
         path="/"
@@ -79,10 +79,12 @@ const HomePage = (props) => {
             </ColorProvider>
           </React.Fragment>
         )}
-      ></Route>
+      />
+
       {loadedCards.map((card) => (
         <Route
           exact
+          key={card.id}
           path={`/${card.name}/${card.id}`}
           render={() => (
             <React.Fragment>
@@ -91,7 +93,7 @@ const HomePage = (props) => {
           )}
         ></Route>
       ))}
-    </Router>
+    </div>
   );
 };
 

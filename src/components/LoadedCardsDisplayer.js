@@ -16,8 +16,8 @@ const LoadedCardsDisplayer = (props) => {
                 className="img-fluid zoom"
                 alt="Card"
               ></img>
-              <p style={{ textAlign: "center" }}>{card.name}</p>
             </Link>
+            <h5 style={{ textAlign: "center" }}>{card.name}</h5>
           </Col>
         ))}
       </Row>
