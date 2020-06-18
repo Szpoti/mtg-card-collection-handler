@@ -45,15 +45,15 @@ const HomePage = (props) => {
                 setIsLoading={setIsLoading}
                 colors={colors}
               />
+              <ColorProvider>
+                <Filter setHomeColors={setColors} />
+              </ColorProvider>
               <p id="searchBarErrorMsg"></p>
             </Col>
           </Row>
         </Container>
         <Loader isLoading={isLoading} />
         <Container>
-          <ColorProvider>
-            <Filter setHomeColors={setColors} />
-          </ColorProvider>
           <LoadedCardsDisplayer loadedCards={loadedCards} />
         </Container>
         <Container className="p-3">

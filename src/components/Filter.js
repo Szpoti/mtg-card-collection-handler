@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { ColorContext } from "./ColorProvider";
 
 const Filter = (props) => {
@@ -12,79 +12,42 @@ const Filter = (props) => {
       setColors(colors.filter((color) => color !== e.target.value));
       props.setHomeColors(colors.filter((color) => color !== e.target.value));
     }
-    console.log("Colors: ", colors);
   };
 
-  const manaStyle = {
-    width: "3%",
-    height: "auto",
-  };
+  const cardColors = [
+    { id: "B", name: "Black" },
+    { id: "W", name: "White" },
+    { id: "U", name: "Blue" },
+    { id: "R", name: "Red" },
+    { id: "G", name: "Green" },
+  ];
 
   return (
-    <div style={{ border: "black 1px solid" }}>
-      <div>
-        <h5>Colors</h5>
-        <input
-          type="checkbox"
-          value="B"
-          onClick={handleColorCheck.bind(this)}
-        ></input>{" "}
-        Black
-        <img
-          src="https://img.scryfall.com/symbology/B.svg"
-          alt="Black mana"
-          style={manaStyle}
-        ></img>
-        <br />
-        <input
-          type="checkbox"
-          value="W"
-          onClick={handleColorCheck.bind(this)}
-        ></input>{" "}
-        White
-        <img
-          src="https://img.scryfall.com/symbology/W.svg"
-          alt="White mana"
-          style={manaStyle}
-        ></img>
-        <br />
-        <input
-          type="checkbox"
-          value="U"
-          onClick={handleColorCheck.bind(this)}
-        ></input>{" "}
-        Blue
-        <img
-          src="https://img.scryfall.com/symbology/U.svg"
-          alt="Blue mana"
-          style={manaStyle}
-        ></img>
-        <br />
-        <input
-          type="checkbox"
-          value="R"
-          onClick={handleColorCheck.bind(this)}
-        ></input>{" "}
-        Red
-        <img
-          src="https://img.scryfall.com/symbology/R.svg"
-          alt="Red mana"
-          style={manaStyle}
-        ></img>
-        <br />
-        <input
-          type="checkbox"
-          value="G"
-          onClick={handleColorCheck.bind(this)}
-        ></input>{" "}
-        Green
-        <img
-          src="https://img.scryfall.com/symbology/G.svg"
-          alt="Green mana"
-          style={manaStyle}
-        ></img>
-        <br />
-      </div>
+    <div className="text-center text-md-right mt-3">
+      {cardColors.map((cardColor) => {
+        return (
+          <span className="ml-1 align-middle text-nowrap">
+            <input
+              type="checkbox"
+              value={cardColor.id}
+              onClick={handleColorCheck.bind(this)}
+              id={"color-" + cardColor.name}
+              className="mr-1"
+            ></input>
+            <label for={`color-${cardColor.name}`}>
+              {cardColor.name}
+              <img
+                src={
+                  "https://img.scryfall.com/symbology/" + cardColor.id + ".svg"
+                }
+                alt={cardColor.name + " mana"}
+                className="mx-1 align-text-top"
+                style={{ width: 22 }}
+              ></img>
+            </label>
+          </span>
+        );
+      })}
     </div>
   );
 };
