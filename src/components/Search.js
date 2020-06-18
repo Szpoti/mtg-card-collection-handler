@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { ColorContext } from "./ColorProvider";
 
 const Search = (props) => {
   let [cardTitle, setCardTitleState] = useState(String.empty);
-
   const setCardTitle = (e) => {
     setCardTitleState(e.target.value);
   };
@@ -16,7 +16,11 @@ const Search = (props) => {
       props.setIsLoading(true);
       const title = cardTitle;
       const cards = await props.cardService.search(title);
-      props.setLoadedCards(cards);
+      const filteredCards = await props.cardService.useFilter(
+        cards,
+        props.colors
+      );
+      props.setLoadedCards(filteredCards);
       props.setIsLoading(false);
     } else {
       handleSearchBarProperties("on");
