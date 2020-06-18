@@ -16,6 +16,7 @@ const DetailedCard = (props) => {
   const displayPrice = (price) => {
     return price !== "null€" ? price : "price not found";
   };
+  console.log("Card:", props.card);
   return (
     <div>
       <Link to="/">
@@ -28,7 +29,7 @@ const DetailedCard = (props) => {
           Back to main page
         </h3>
       </Link>
-      <div>
+      <div style={content}>
         <img
           src={props.card.image_uris.border_crop}
           alt={props.card.name}
@@ -56,21 +57,45 @@ const DetailedCard = (props) => {
             <strong>Price trend:</strong>
             {displayPrice(price())}
           </span>
+          <br />
+          <div className="textStyle" style={textStyle}>
+            {props.card.oracle_text}
+          </div>
         </div>
       </div>
+      <table style={tableStyle}></table>
     </div>
   );
 };
 
+const tableStyle = {
+  width: "100%",
+};
+
+const textStyle = {
+  border: "black 0.5px solid",
+  overflow: "hidden",
+};
+
+const content = {
+  padding: "20px",
+  overflow: "hidden",
+};
+
 const detailsStyle = {
+  marginLeft: "15px",
+  display: "block",
+  margin: "2px 0 0 0",
   fontSize: "200%",
 };
 
 const cardImageStyle = {
-  width: "20%",
+  width: "30%",
   heigth: "auto",
   border: "solid black 3px",
   borderRadius: "1%",
+  marginRight: "15px",
+  float: "left",
 };
 
 export default DetailedCard;

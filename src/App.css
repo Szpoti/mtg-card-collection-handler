@@ -58,6 +58,10 @@
   -webkit-animation: spin 1s linear infinite;
 }
 
+.textStyle {
+  background-image: url(https://image.freepik.com/free-photo/brown-papyrus-paper_53876-14519.jpg);
+}
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
