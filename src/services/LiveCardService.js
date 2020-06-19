@@ -1,15 +1,10 @@
 import axios from "axios";
 
 export default class LiveCardService {
-  constructor() {
-    this.mtg = require("mtgsdk");
-  }
-
   useFilter(cards, colors) {
     if (colors.length <= 0) {
       return cards;
     }
-    cards.map((card) => console.log(card));
     let cardsToReturn = [];
     cards.map((card) => {
       for (let c1 = 0; c1 < card.color_identity.length; c1++) {
@@ -22,6 +17,14 @@ export default class LiveCardService {
       }
     });
     return cardsToReturn;
+  }
+
+  async getOtherPrints(url) {
+    const prints = [];
+    await axios.get(url).then((cards) => {
+      cards.data.data.map((card) => prints.push(card));
+    });
+    return prints;
   }
 
   search(title) {
