@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import LiveCardService from "../services/LiveCardService";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import React from "react";
+import { Container } from "react-bootstrap";
+import { BrowserRouter as Link } from "react-router-dom";
 
 const CardPage = (props) => {
   const price = (card) => {
@@ -18,9 +18,8 @@ const CardPage = (props) => {
     return price !== "null€" ? price : "price not found";
   };
 
-  console.log("props.card in cardpage:", props.card);
   return (
-    <div>
+    <Container>
       <div style={content}>
         <img
           src={props.card.image_uris.border_crop}
@@ -75,7 +74,7 @@ const CardPage = (props) => {
           ))}
         </tbody>
       </table>
-    </div>
+    </Container>
   );
 };
 

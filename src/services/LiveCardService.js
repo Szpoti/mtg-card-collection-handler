@@ -5,7 +5,6 @@ export default class LiveCardService {
     if (colors.length <= 0) {
       return cards;
     }
-    cards.map((card) => console.log(card));
     let cardsToReturn = [];
     cards.map((card) => {
       for (let c1 = 0; c1 < card.color_identity.length; c1++) {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Container } from "react-bootstrap";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
 import LiveCardService from "../services/LiveCardService";
@@ -16,13 +17,12 @@ const DetailedCard = (props) => {
 
   useEffect(() => {
     setMainCard(props.card);
-    console.log("Setting main card!", mainCard);
     loadOtherPrints(props.card.prints_search_uri);
   }, []);
 
   return (
     <div>
-      <div>
+      <Container className="mt-3">
         <Link to="/">
           <h3>
             <img
@@ -33,7 +33,7 @@ const DetailedCard = (props) => {
             Back to main page
           </h3>
         </Link>
-      </div>
+      </Container>
       {prints.map((print) => (
         <Route
           path={`/${print.name}/${print.id}`}
