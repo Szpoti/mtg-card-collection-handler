@@ -3,26 +3,16 @@ import { Container } from "react-bootstrap";
 import { BrowserRouter as Link } from "react-router-dom";
 
 const CardPage = (props) => {
-  const price = (card) => {
-    return card.prices.usd != null
-      ? `${card.prices.usd}$`
-      : `${card.prices.eur}€`;
-  };
-
   const capitalize = (s) => {
     if (typeof s !== "string") return "";
     return s.charAt(0).toUpperCase() + s.slice(1);
-  };
-
-  const displayPrice = (price) => {
-    return price !== "null€" ? price : "price not found";
   };
 
   return (
     <Container>
       <div style={content}>
         <img
-          src={props.card.image_uris.border_crop}
+          src={props.card.imageUri}
           alt={props.card.name}
           style={cardImageStyle}
         ></img>
@@ -36,21 +26,21 @@ const CardPage = (props) => {
           </span>
           <br />
           <span>
-            <strong>Expansion set:</strong> {props.card.set_name} (
+            <strong>Expansion set:</strong> {props.card.setName} (
             {props.card.set.toUpperCase()})
           </span>
           <br />
           <span>
-            <strong>Type:</strong> {props.card.type_line}
+            <strong>Type:</strong> {props.card.type}
           </span>
           <br />
           <span>
             <strong>Price trend:</strong>
-            {displayPrice(price(props.card))}
+            {props.card.price}
           </span>
           <br />
           <div className="textStyle" style={textStyle}>
-            {props.card.oracle_text}
+            {props.card.text}
           </div>
         </div>
       </div>
@@ -66,10 +56,10 @@ const CardPage = (props) => {
             <tr>
               <td>
                 <Link to={`/${cardPrint.name}/${cardPrint.id}`}>
-                  {cardPrint.set_name}
+                  {cardPrint.setName}
                 </Link>
               </td>
-              <td>{displayPrice(price(cardPrint))}</td>
+              <td>{cardPrint.price}</td>
             </tr>
           ))}
         </tbody>
@@ -85,6 +75,7 @@ const tableStyle = {
 const textStyle = {
   border: "black 0.5px solid",
   overflow: "hidden",
+  whiteSpace: "pre-wrap",
 };
 
 const content = {

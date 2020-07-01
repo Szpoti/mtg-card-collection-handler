@@ -19,11 +19,14 @@ export default class LiveCardService {
     return cardsToReturn;
   }
 
-  async getOtherPrints(url) {
+  async getOtherPrints(oracleId) {
     const prints = [];
-    await axios.get(url).then((cards) => {
-      cards.data.data.map((card) => prints.push(card));
-    });
+    console.log("url", oracleId);
+    await axios
+      .get(`https://localhost:5001/api/Card/${oracleId}/prints`)
+      .then((cards) => {
+        cards.data.map((card) => prints.push(card));
+      });
     return prints;
   }
 
@@ -54,8 +57,8 @@ export default class LiveCardService {
   }
 
   async getAll(callback) {
-    await axios.get("https://api.scryfall.com/cards?page=1").then((cards) => {
-      callback(cards.data.data);
+    await axios.get("https://localhost:5001/api/Cards").then((cards) => {
+      callback(cards.data);
     });
   }
 }
