@@ -7,9 +7,9 @@ export default class LiveCardService {
     }
     let cardsToReturn = [];
     cards.map((card) => {
-      for (let c1 = 0; c1 < card.color_identity.length; c1++) {
+      for (let c1 = 0; c1 < card.colorIdentity.length; c1++) {
         for (let c2 = 0; c2 < colors.length; c2++) {
-          if (card.color_identity[c1] === colors[c2]) {
+          if (card.colorIdentity[c1] === colors[c2]) {
             cardsToReturn.push(card);
             return;
           }
