@@ -21,7 +21,6 @@ export default class LiveCardService {
 
   async getOtherPrints(oracleId) {
     const prints = [];
-    console.log("url", oracleId);
     await axios
       .get(`https://localhost:5001/api/Card/${oracleId}/prints`)
       .then((cards) => {
@@ -43,11 +42,9 @@ export default class LiveCardService {
   }
 
   static async getSymbols() {
-    console.log("Getting symbols....");
     return await axios
       .get("https://localhost:5001/api/symbology/symbols")
       .then((symbols) => {
-        console.log("symbols", symbols.data);
         return symbols.data;
       });
   }

@@ -25,28 +25,34 @@ const CardPage = (props) => {
   }, []);
 
   const insertSvgs = (fullText) => {
-    let newText = fullText;
-    let tokens = [];
-    console.log("fullText", fullText);
-    symbols.forEach((symbol) => {
-      if (newText.includes(symbol.sym)) {
-        tokens.push(symbol);
-      }
-    });
-    tokens.forEach((token) => {
-      let url = token.uri;
-      let alt = token.sym;
-      let tag = `<img src=${url} alt=sym style="width: 6%;height: auto;"></img>`;
-      while (newText.includes(alt)) {
-        newText = newText.replace(alt, tag);
-      }
-    });
-    setIsLoading(false);
-    document.getElementById("mainPage").style = { mainPageShow };
-    return newText;
+    if (fullText != null) {
+      let newText = fullText;
+      let tokens = [];
+      symbols.forEach((symbol) => {
+        if (newText.includes(symbol.sym)) {
+          tokens.push(symbol);
+        }
+      });
+      tokens.forEach((token) => {
+        let url = token.uri;
+        let alt = token.sym;
+        let tag = `<img src=${url} alt=sym style="width: 6%;height: auto;"></img>`;
+        while (newText.includes(alt)) {
+          newText = newText.replace(alt, tag);
+        }
+      });
+      setIsLoading(false);
+      document.getElementById("mainPage").style = { mainPageShow };
+
+      return newText;
+    } else {
+      setIsLoading(false);
+      document.getElementById("mainPage").style = { mainPageShow };
+
+      return "Text not found";
+    }
   };
 
-  
   if (props.card.imageUri === null) {
     props.card.imageUri = "/img/missing-card-image.jpg";
   }
