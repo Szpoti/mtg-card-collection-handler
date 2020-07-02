@@ -30,10 +30,16 @@ export default class LiveCardService {
     return prints;
   }
 
-  search(title) {
+  search(title, colors) {
     return axios
-      .get(`https://localhost:5001/api/Search/card?q=${title}`)
-      .then((response) => { return response.data; });
+      .get(
+        `https://localhost:5001/api/Search/card?q=${title}&colors=${colors.join(
+          ","
+        )}`
+      )
+      .then((response) => {
+        return response.data;
+      });
   }
 
   async getAll(callback) {
