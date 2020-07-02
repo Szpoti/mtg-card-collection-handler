@@ -10,14 +10,14 @@ const DetailedCard = (props) => {
   const cardService = new LiveCardService();
   const [mainCard, setMainCard] = useState(null);
 
-  const loadOtherPrints = async (prints_search_uri) => {
-    const newPrints = await cardService.getOtherPrints(prints_search_uri);
+  const loadOtherPrints = async (card) => {
+    const newPrints = await cardService.getOtherPrints(card.oracleId);
     setPrints(newPrints);
   };
 
   useEffect(() => {
     setMainCard(props.card);
-    loadOtherPrints(props.card.prints_search_uri);
+    loadOtherPrints(props.card);
   }, []);
 
   return (

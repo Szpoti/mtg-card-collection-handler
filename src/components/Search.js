@@ -15,12 +15,8 @@ const Search = (props) => {
       props.setLoadedCards([]);
       props.setIsLoading(true);
       const title = cardTitle;
-      const cards = await props.cardService.search(title);
-      const filteredCards = await props.cardService.useFilter(
-        cards,
-        props.colors
-      );
-      props.setLoadedCards(filteredCards);
+      const cards = await props.cardService.search(title, props.colors);
+      props.setLoadedCards(cards);
       props.setIsLoading(false);
     } else {
       handleSearchBarProperties("on");
