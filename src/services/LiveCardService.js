@@ -32,28 +32,8 @@ export default class LiveCardService {
 
   search(title) {
     return axios
-      .get(`https://api.scryfall.com/catalog/card-names`)
-      .then((cards) => {
-        return cards.data.data.filter((cardName) =>
-          cardName.toLowerCase().includes(title.toLowerCase())
-        );
-      })
-      .then(async (cards) => {
-        const cardsToLoad = [];
-        const promises = cards.map((cardName) => {
-          return axios
-            .get(
-              `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(
-                cardName
-              )}`
-            )
-            .then((response) => {
-              cardsToLoad.push(response.data);
-            });
-        });
-        await Promise.all(promises);
-        return cardsToLoad;
-      });
+      .get(`https://localhost:5001/api/Search/card?q=${title}`)
+      .then((response) => { return response.data; });
   }
 
   async getAll(callback) {
