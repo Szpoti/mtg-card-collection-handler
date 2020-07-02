@@ -42,6 +42,16 @@ export default class LiveCardService {
       });
   }
 
+  static async getSymbols() {
+    console.log("Getting symbols....");
+    return await axios
+      .get("https://localhost:5001/api/symbology/symbols")
+      .then((symbols) => {
+        console.log("symbols", symbols.data);
+        return symbols.data;
+      });
+  }
+
   async getAll(callback) {
     await axios.get("https://localhost:5001/api/Cards").then((cards) => {
       callback(cards.data);
