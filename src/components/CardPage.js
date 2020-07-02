@@ -46,6 +46,11 @@ const CardPage = (props) => {
     return newText;
   };
 
+  
+  if (props.card.imageUri === null) {
+    props.card.imageUri = "/img/missing-card-image.jpg";
+  }
+
   return (
     <Container>
       <Loader isLoading={isLoading}></Loader>

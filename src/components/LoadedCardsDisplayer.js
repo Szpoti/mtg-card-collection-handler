@@ -10,7 +10,7 @@ const LoadedCardsDisplayer = (props) => {
           <Col key={card.id} xs={4} md={3} className="p-3">
             <Link to={`/${card.name}/${card.id}`}>
               <img
-                src={card.imageUri === undefined ? "" : card.imageUri}
+                src={card.imageUri === null ? "/img/missing-card-image.jpg" : card.imageUri}
                 className="img-fluid zoom"
                 alt="Card"
               ></img>
