@@ -8,9 +8,14 @@ import Search from "./Search";
 import Filter from "./Filter";
 import { ColorProvider } from "./ColorProvider";
 import DetailedCard from "./DetailedCard";
+import UserLoginService from "../services/UserLoginService";
 
 const HomePage = (props) => {
   const cardService = props.cardService;
+  const userLoginService = new UserLoginService();
+  const [username, setUsernameState] = useState();
+  const [email, setEmailState] = useState();
+  const [password, setPasswordState] = useState();
   const [loadedCards, setLoadedCards] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [colors, setColors] = useState([]);
@@ -31,6 +36,15 @@ const HomePage = (props) => {
     setIsLoading(false);
   };
 
+  const handleRegister = (e) => {
+    e.preventDefault();
+    userLoginService.Registration(
+      document.getElementById("usernameI").value,
+      document.getElementById("emailI").value,
+      document.getElementById("passwordI").value
+    );
+  };
+
   return (
     <div>
       <Route
@@ -41,6 +55,39 @@ const HomePage = (props) => {
             <ColorProvider>
               <Container>
                 <Container className="p-3">
+                  <Row>
+                    <form>
+                      <input
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                      ></input>
+                      <input
+                        name="password"
+                        type="password"
+                        placeholder="Password"
+                      ></input>
+                      <button type="submit">Login</button>
+                    </form>
+                    <form>
+                      <input
+                        type="text"
+                        id="usernameI"
+                        placeholder="Username"
+                      ></input>
+                      <input
+                        id="emailI"
+                        type="email"
+                        placeholder="Email"
+                      ></input>
+                      <input
+                        id="passwordI"
+                        type="password"
+                        placeholder="Password"
+                      ></input>
+                      <button onClick={handleRegister}>Registration</button>
+                    </form>
+                  </Row>
                   <Row className="pt-3">
                     <Col xs={12} md={6} className="order-1 order-md-0">
                       <Pagination />
