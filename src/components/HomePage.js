@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Link, Route } from "react-router-dom";
 import Loader from "./Loader";
 import Login from "./Login";
 import { Container, Col, Row } from "react-bootstrap";
@@ -9,14 +9,9 @@ import Search from "./Search";
 import Filter from "./Filter";
 import { ColorProvider } from "./ColorProvider";
 import DetailedCard from "./DetailedCard";
-import UserLoginService from "../services/UserLoginService";
 
 const HomePage = (props) => {
   const cardService = props.cardService;
-  const userLoginService = new UserLoginService();
-  const [username, setUsernameState] = useState();
-  const [email, setEmailState] = useState();
-  const [password, setPasswordState] = useState();
   const [loadedCards, setLoadedCards] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [colors, setColors] = useState([]);
@@ -37,15 +32,6 @@ const HomePage = (props) => {
     setIsLoading(false);
   };
 
-  const handleRegister = (e) => {
-    e.preventDefault();
-    userLoginService.Registration(
-      document.getElementById("usernameI").value,
-      document.getElementById("emailI").value,
-      document.getElementById("passwordI").value
-    );
-  };
-
   return (
     <div>
       <Route
@@ -62,24 +48,15 @@ const HomePage = (props) => {
                     </Col>
                   </Row>
                   <Row>
-                    <form>
-                      <input
-                        type="text"
-                        id="usernameI"
-                        placeholder="Username"
-                      ></input>
-                      <input
-                        id="emailI"
-                        type="email"
-                        placeholder="Email"
-                      ></input>
-                      <input
-                        id="passwordI"
-                        type="password"
-                        placeholder="Password"
-                      ></input>
-                      <button onClick={handleRegister}>Registration</button>
-                    </form>
+                    <Col>
+                      <p className="text-md-center text-lg-right">
+                        Doesn't have an account yet?
+                        <Link to={`/registration`}
+                          className="ml-1">
+                          Click to register.
+                        </Link>
+                      </p>
+                    </Col>
                   </Row>
                   <Row className="pt-3">
                     <Col xs={12} md={6} className="order-1 order-md-0">
