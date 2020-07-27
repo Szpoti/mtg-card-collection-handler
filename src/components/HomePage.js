@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import Loader from "./Loader";
+import Login from "./Login";
 import { Container, Col, Row } from "react-bootstrap";
 import LoadedCardsDisplayer from "./LoadedCardsDisplayer";
 import Pagination from "./Pagination";
@@ -56,19 +57,11 @@ const HomePage = (props) => {
               <Container>
                 <Container className="p-3">
                   <Row>
-                    <form>
-                      <input
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                      ></input>
-                      <input
-                        name="password"
-                        type="password"
-                        placeholder="Password"
-                      ></input>
-                      <button type="submit">Login</button>
-                    </form>
+                    <Col>
+                      <Login />
+                    </Col>
+                  </Row>
+                  <Row>
                     <form>
                       <input
                         type="text"
