@@ -1,12 +1,20 @@
 import React from "react";
-import { Container, Col, Button, Form, FormControl, InputGroup, Row } from "react-bootstrap";
+import {
+  Container,
+  Col,
+  Button,
+  Form,
+  FormControl,
+  InputGroup,
+  Row,
+} from "react-bootstrap";
 
 const Registration = (props) => {
   const authService = props.authService;
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    authService.Registration(
+    await authService.Registration(
       document.querySelector("#username").value,
       document.querySelector("#email").value,
       document.querySelector("#password").value
@@ -24,9 +32,7 @@ const Registration = (props) => {
               Username
             </Form.Label>
             <InputGroup className="mb-2 mr-sm-2">
-              <Form.Control
-                id="username"
-                placeholder="Username" />
+              <Form.Control id="username" placeholder="Username" />
             </InputGroup>
 
             <Form.Label htmlFor="email" srOnly>
@@ -36,9 +42,7 @@ const Registration = (props) => {
               <InputGroup.Prepend>
                 <InputGroup.Text>@</InputGroup.Text>
               </InputGroup.Prepend>
-              <FormControl
-                id="email"
-                placeholder="Email address" />
+              <FormControl id="email" placeholder="Email address" />
             </InputGroup>
 
             <Form.Label htmlFor="password" srOnly>
@@ -48,14 +52,16 @@ const Registration = (props) => {
               <Form.Control
                 id="password"
                 type="password"
-                placeholder="Password" />
+                placeholder="Password"
+              />
             </InputGroup>
 
             <Button
               variant="primary"
               type="submit"
               className="mb-2 mr-sm-2"
-              onClick={handleRegister}>
+              onClick={handleRegister}
+            >
               Registration
             </Button>
           </Form>

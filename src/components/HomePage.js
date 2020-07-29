@@ -51,8 +51,7 @@ const HomePage = (props) => {
                     <Col>
                       <p className="text-md-center text-lg-right">
                         Doesn't have an account yet?
-                        <Link to={`/registration`}
-                          className="ml-1">
+                        <Link to={`/registration`} className="ml-1">
                           Click to register.
                         </Link>
                       </p>
