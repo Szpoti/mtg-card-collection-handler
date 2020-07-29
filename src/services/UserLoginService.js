@@ -3,7 +3,6 @@ import axios from "axios";
 
 export default class UserLoginService {
   Registration(username, email, password) {
-    console.log("username,email,password", username, email, password);
     return axios
       .post(`https://localhost:5001/api/user/register`, {
         username: username,
@@ -16,7 +15,6 @@ export default class UserLoginService {
   }
 
   Login(email, password) {
-    console.log("email,password", email, password);
     return axios
       .post(`https://localhost:5001/api/user/login`, {
         email: email,
