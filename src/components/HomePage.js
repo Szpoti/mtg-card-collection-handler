@@ -39,11 +39,7 @@ const HomePage = (props) => {
     if (user === undefined) {
       block = (
         <div>
-          <Row>
-            <Col>
-              <Login authService={authService} setHomeUser={setUser} />
-            </Col>
-          </Row>
+          <Login authService={authService} setHomeUser={setUser} />
           <Row>
             <Col>
               <p className="text-md-center text-lg-right">
