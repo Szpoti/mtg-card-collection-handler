@@ -14,4 +14,16 @@ export default class UserLoginService {
         return response.data;
       });
   }
+
+  Login(email, password) {
+    console.log("email,password", email, password);
+    return axios
+      .post(`https://localhost:5001/api/user/login`, {
+        email: email,
+        password: password,
+      })
+      .then((response) => {
+        return response.data;
+      });
+  }
 }

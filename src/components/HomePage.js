@@ -11,6 +11,8 @@ import { ColorProvider } from "./ColorProvider";
 import DetailedCard from "./DetailedCard";
 
 const HomePage = (props) => {
+  const [user, setUser] = useState();
+  const authService = props.authService;
   const cardService = props.cardService;
   const [loadedCards, setLoadedCards] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -32,6 +34,38 @@ const HomePage = (props) => {
     setIsLoading(false);
   };
 
+  const LoginBar = (props) => {
+    let block;
+    if (user === undefined) {
+      block = (
+        <div>
+          <Row>
+            <Col>
+              <Login authService={authService} setHomeUser={setUser} />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <p className="text-md-center text-lg-right">
+                Doesn't have an account yet?
+                <Link to={`/registration`} className="ml-1">
+                  Click to register.
+                </Link>
+              </p>
+            </Col>
+          </Row>
+        </div>
+      );
+    } else {
+      block = (
+        <p style={{ float: "right" }}>
+          Logged in as <strong>{user.username}</strong>
+        </p>
+      );
+    }
+    return block;
+  };
+
   return (
     <div>
       <Route
@@ -42,21 +76,7 @@ const HomePage = (props) => {
             <ColorProvider>
               <Container>
                 <Container className="p-3">
-                  <Row>
-                    <Col>
-                      <Login />
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <p className="text-md-center text-lg-right">
-                        Doesn't have an account yet?
-                        <Link to={`/registration`} className="ml-1">
-                          Click to register.
-                        </Link>
-                      </p>
-                    </Col>
-                  </Row>
+                  <LoginBar />
                   <Row className="pt-3">
                     <Col xs={12} md={6} className="order-1 order-md-0">
                       <Pagination />

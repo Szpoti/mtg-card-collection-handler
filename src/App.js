@@ -18,7 +18,9 @@ const App = (props) => {
         <Route
           key="home"
           path="/"
-          render={() => <HomePage cardService={cardService} />}
+          render={() => (
+            <HomePage cardService={cardService} authService={authService} />
+          )}
         ></Route>
         <Route
           key="registration"
