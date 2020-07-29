@@ -27,6 +27,7 @@ const Login = (props) => {
       props.setHomeUser(user);
     }
   };
+
   return (
     <div>
       <Row>

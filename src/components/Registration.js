@@ -8,18 +8,23 @@ import {
   InputGroup,
   Row,
 } from "react-bootstrap";
+import { Redirect, useHistory } from "react-router-dom";
 
 const Registration = (props) => {
   const authService = props.authService;
+  const history = useHistory();
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    await authService.Registration(
-      document.querySelector("#username").value,
-      document.querySelector("#email").value,
-      document.querySelector("#password").value
-    );
-    document.getElementById("regmsg").style = regMsgShow;
+    const user = {
+      username: document.querySelector("#username").value,
+      email: document.querySelector("#email").value,
+      password: document.querySelector("#password").value,
+    };
+    const mainUser = await authService.Registration(user);
+    props.setMainUser(mainUser);
+    console.log("user", mainUser);
+    history.push("/");
   };
 
   const regMsg = {

@@ -11,7 +11,6 @@ import { ColorProvider } from "./ColorProvider";
 import DetailedCard from "./DetailedCard";
 
 const HomePage = (props) => {
-  const [user, setUser] = useState();
   const authService = props.authService;
   const cardService = props.cardService;
   const [loadedCards, setLoadedCards] = useState([]);
@@ -36,10 +35,11 @@ const HomePage = (props) => {
 
   const LoginBar = (props) => {
     let block;
-    if (user === undefined) {
+    console.log("props.user", props.user);
+    if (props.user === undefined) {
       block = (
         <div>
-          <Login authService={authService} setHomeUser={setUser} />
+          <Login authService={authService} setHomeUser={props.setMainUser} />
           <Row>
             <Col>
               <p className="text-md-center text-lg-right">
@@ -55,7 +55,7 @@ const HomePage = (props) => {
     } else {
       block = (
         <p style={{ float: "right" }}>
-          Logged in as <strong>{user.username}</strong>
+          Logged in as <strong>{props.user.username}</strong>
         </p>
       );
     }
