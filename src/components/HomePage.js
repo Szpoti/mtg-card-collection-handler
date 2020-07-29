@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Link, Route } from "react-router-dom";
 import Loader from "./Loader";
+import Login from "./Login";
 import { Container, Col, Row } from "react-bootstrap";
 import LoadedCardsDisplayer from "./LoadedCardsDisplayer";
 import Pagination from "./Pagination";
@@ -41,6 +42,21 @@ const HomePage = (props) => {
             <ColorProvider>
               <Container>
                 <Container className="p-3">
+                  <Row>
+                    <Col>
+                      <Login />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <p className="text-md-center text-lg-right">
+                        Doesn't have an account yet?
+                        <Link to={`/registration`} className="ml-1">
+                          Click to register.
+                        </Link>
+                      </p>
+                    </Col>
+                  </Row>
                   <Row className="pt-3">
                     <Col xs={12} md={6} className="order-1 order-md-0">
                       <Pagination />
