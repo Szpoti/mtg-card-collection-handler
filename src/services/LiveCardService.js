@@ -30,13 +30,18 @@ export default class LiveCardService {
   }
 
   search(title, colors) {
+    const escapedTitle = encodeURIComponent(title);
     return axios
       .get(
-        `https://localhost:5001/api/Search/card?q=${title}&colors=${colors.join(
+        `https://localhost:5001/api/Search/card?q=${escapedTitle}&colors=${colors.join(
           ","
         )}`
       )
       .then((response) => {
+        console.log("response", response);
+        if (response.status === 400) {
+          return null;
+        }
         return response.data;
       });
   }
