@@ -29,23 +29,7 @@ export default class UserLoginService {
   }
 
   async checkLoggedIn() {
-    function getCookie(cookieName) {
-      const name = cookieName + "=";
-      const decodedCookie = decodeURIComponent(document.cookie);
-      const ca = decodedCookie.split(';');
-      for(let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-          c = c.substring(1);
-        }
-
-        if (c.indexOf(name) == 0) {
-          return c.substring(name.length, c.length);
-        }
-      }
-      throw `Couldn't find cookie with name ${cookieName}`;
-    }
-    const authorizationCookie = getCookie('Authorization');
+    const authorizationCookie = this.__getCookie('Authorization');
     axios.defaults.headers.common['Authorization'] = authorizationCookie;
     const jwt = authorizationCookie.substring('Bearer '.length);
     const response = await axios
@@ -54,16 +38,41 @@ export default class UserLoginService {
     return [response.status, response.data];
   }
 
-  __saveJwt(payload) {
-    function setCookie(name, value, expiresAt) {
-      const d = new Date(expiresAt * 1000);
-      document.cookie = `${name}=${value};expires=${d.toUTCString()};path=/`;
-    }
+  async logOut() {
+    await axios.post(`https://localhost:5001/api/user/logout`, {
+        jwt: this.__getCookie('Authorization').substring('Bearer '.length),
+    });
+    delete(axios.defaults.headers.common['Authorization']);
+    this.__setCookie('Authorization', 0, 1);
+  }
 
+  __saveJwt(payload) {
     const token = payload.jwt;
     delete(payload.jwt);
     const tokenDetails = jwtDecode(token);
-    setCookie('Authorization', `Bearer ${token}`, tokenDetails.exp);
+    this.__setCookie('Authorization', `Bearer ${token}`, tokenDetails.exp);
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  }
+
+  __setCookie(name, value, expiresAt) {
+    const d = new Date(expiresAt * 1000);
+    document.cookie = `${name}=${value};expires=${d.toUTCString()};path=/`;
+  }
+
+  __getCookie(cookieName) {
+    const name = cookieName + "=";
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const ca = decodedCookie.split(';');
+    for(let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    throw `Couldn't find cookie with name ${cookieName}`;
   }
 }
