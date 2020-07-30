@@ -11,6 +11,7 @@ export default class UserLoginService {
         password: password,
       })
       .then((response) => {
+        this.__saveJwt(response.data);
         return response.data;
       });
   }
@@ -22,16 +23,7 @@ export default class UserLoginService {
         password: password,
       })
       .then((response) => {
-        function setCookie(name, value, expiresAt) {
-          const d = new Date(expiresAt * 1000);
-          document.cookie = `${name}=${value};expires=${d.toUTCString()};path=/`;
-        }
-
-        const token = response.data.jwt;
-        delete(response.data.jwt);
-        const tokenDetails = jwtDecode(token);
-        setCookie('Authorization', `Bearer ${token}`, tokenDetails.exp);
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        this.__saveJwt(response.data);
         return response.data;
       });
   }
@@ -60,5 +52,18 @@ export default class UserLoginService {
       .get(`https://localhost:5001/api/user/login?jwt=${jwt}`)
       .catch(e => e);
     return [response.status, response.data];
+  }
+
+  __saveJwt(payload) {
+    function setCookie(name, value, expiresAt) {
+      const d = new Date(expiresAt * 1000);
+      document.cookie = `${name}=${value};expires=${d.toUTCString()};path=/`;
+    }
+
+    const token = payload.jwt;
+    delete(payload.jwt);
+    const tokenDetails = jwtDecode(token);
+    setCookie('Authorization', `Bearer ${token}`, tokenDetails.exp);
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   }
 }
