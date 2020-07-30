@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Link, Route } from "react-router-dom";
 import Loader from "./Loader";
 import Login from "./Login";
-import { Container, Col, Row } from "react-bootstrap";
+import { Container, Col, Row, Button } from "react-bootstrap";
 import LoadedCardsDisplayer from "./LoadedCardsDisplayer";
 import Pagination from "./Pagination";
 import Search from "./Search";
@@ -34,6 +34,10 @@ const HomePage = (props) => {
     setIsLoading(false);
   };
 
+  const handleLogout = () => {
+    setUser();
+  };
+
   const LoginBar = (props) => {
     let block;
     if (user === undefined) {
@@ -54,9 +58,24 @@ const HomePage = (props) => {
       );
     } else {
       block = (
-        <p style={{ float: "right" }}>
-          Logged in as <strong>{user.username}</strong>
-        </p>
+        <div>
+          <Row>
+            <Col>
+              <p style={{ float: "right" }}>
+                Logged in as <strong>{user.username}</strong>
+              </p>
+            </Col>
+            <Col>
+              <Button
+                variant="primary"
+                className="mb-2 mr-sm-2"
+                onClick={handleLogout}
+              >
+                Log out
+              </Button>
+            </Col>
+          </Row>
+        </div>
       );
     }
     return block;
