@@ -13,10 +13,12 @@ const Login = (props) => {
 
   useEffect(() => {
     async function authenticate() {
-      const [httpStatus, user] = await authService.checkLoggedIn();
-      if (httpStatus == 200) {
-        props.setHomeUser(user);
-      }
+      try {
+        const [httpStatus, user] = await authService.checkLoggedIn();
+        if (httpStatus == 200) {
+          props.setHomeUser(user);
+        }
+      } catch (error) {}
     }
 
     authenticate();
