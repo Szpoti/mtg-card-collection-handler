@@ -21,6 +21,7 @@ export default class UserLoginService {
         password: password,
       })
       .then((response) => {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.jwt}`;
         return response.data;
       });
   }
