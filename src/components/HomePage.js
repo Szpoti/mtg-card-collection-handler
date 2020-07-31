@@ -35,7 +35,8 @@ const HomePage = (props) => {
   };
 
   const handleLogout = () => {
-    setUser();
+    authService.logOut()
+    .then(r => setUser());
   };
 
   const LoginBar = (props) => {

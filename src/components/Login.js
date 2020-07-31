@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Button,
   Form,
@@ -10,6 +10,19 @@ import {
 
 const Login = (props) => {
   const authService = props.authService;
+
+  useEffect(() => {
+    async function authenticate() {
+      try {
+        const [httpStatus, user] = await authService.checkLoggedIn();
+        if (httpStatus == 200) {
+          props.setHomeUser(user);
+        }
+      } catch (error) {}
+    }
+
+    authenticate();
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();

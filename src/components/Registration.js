@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from 'react-router-dom';
 import {
   Container,
   Col,
@@ -11,6 +12,7 @@ import {
 
 const Registration = (props) => {
   const authService = props.authService;
+  const history = useHistory();
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -19,15 +21,7 @@ const Registration = (props) => {
       document.querySelector("#email").value,
       document.querySelector("#password").value
     );
-    document.getElementById("regmsg").style = regMsgShow;
-  };
-
-  const regMsg = {
-    display: "none",
-  };
-
-  const regMsgShow = {
-    display: "auto",
+    history.push('/');
   };
 
   return (
@@ -74,9 +68,6 @@ const Registration = (props) => {
               Registration
             </Button>
           </Form>
-          <p id="regmsg" style={regMsg}>
-            You are succesfully registered! You can log in now.
-          </p>
         </Col>
       </Row>
     </Container>
