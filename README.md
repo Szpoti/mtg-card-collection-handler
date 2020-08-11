@@ -5,7 +5,16 @@ A ui repository for a simply web page MTG Card Collection, where you can browse 
 
 The server is needed to use this webpage, please get it from here:
 https://github.com/Szpoti/mtg-card-collection-handler-server
+
+# Main page
 ![The page](https://i.ibb.co/LtQRc5d/ranpic.png)
+
+Lists random cards to browse from, but you can also search for cards by their name and color.
+
+# Detailed page
+![Detailed page] (https://i.ibb.co/c24PbgX/ujkep.png)
+
+When you click on a card, a detailed page comes in where you can find all the info you need!
 ## Available Scripts
 
 In the project directory, you can run:
