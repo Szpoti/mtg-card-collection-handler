@@ -5,11 +5,11 @@ A ui repository for a simply web page MTG Card Collection, where you can browse 
 
 The server is needed to use this webpage, please get it from here:
 https://github.com/Szpoti/mtg-card-collection-handler-server
-
+![The page](https://i.ibb.co/LtQRc5d/ranpic.png)
 ## Available Scripts
 
 In the project directory, you can run:
-![The page](https://i.ibb.co/LtQRc5d/ranpic.png)
+
 ### `npm start`
 
 Runs the app in the development mode.<br />
