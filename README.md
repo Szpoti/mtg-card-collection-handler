@@ -9,7 +9,7 @@ https://github.com/Szpoti/mtg-card-collection-handler-server
 ## Available Scripts
 
 In the project directory, you can run:
-
+![The page](https://i.ibb.co/LtQRc5d/ranpic.png)
 ### `npm start`
 
 Runs the app in the development mode.<br />
