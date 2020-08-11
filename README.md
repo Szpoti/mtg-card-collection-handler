@@ -12,7 +12,7 @@ https://github.com/Szpoti/mtg-card-collection-handler-server
 Lists random cards to browse from, but you can also search for cards by their name and color.
 
 # Detailed page
-![Detailed page] (https://i.ibb.co/c24PbgX/ujkep.png)
+![Detailed page](https://i.ibb.co/c24PbgX/ujkep.png)
 
 When you click on a card, a detailed page comes in where you can find all the info you need!
 ## Available Scripts
