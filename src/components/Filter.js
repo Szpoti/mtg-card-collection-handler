@@ -23,7 +23,7 @@ const Filter = (props) => {
   ];
 
   return (
-    <div className="text-center text-md-right mt-3">
+    <div>
       {cardColors.map((cardColor) => {
         return (
           <span
@@ -36,6 +36,7 @@ const Filter = (props) => {
               onClick={handleColorCheck.bind(this)}
               id={"color-" + cardColor.name}
               className="mr-1"
+              disabled={props.isDisabled}
             ></input>
             <label htmlFor={`color-${cardColor.name}`}>
               {cardColor.name}
