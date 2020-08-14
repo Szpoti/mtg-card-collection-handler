@@ -197,12 +197,14 @@ const AdvancedSearch = (props) => {
                 <Form.Control
                   type="text"
                   onChange={e => setMinimumPrice(e.target.value)}
+                  disabled={isLoading}
                   className="col-3 mr-3"
                   placeholder='Minimum'
                 />
                 <Form.Control
                   type="text"
                   onChange={e => setMaximumPrice(e.target.value)}
+                  disabled={isLoading}
                   className="col-3"
                   placeholder='Maximum'
                 />
