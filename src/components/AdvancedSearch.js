@@ -84,6 +84,7 @@ const AdvancedSearch = (props) => {
 
   const search = async () => {
     setIsLoading(true);
+    setCards([]);
     const type = {
       artifacts: cleanFromMultiselect(selectedArtifacts),
       enchantments: cleanFromMultiselect(selectedEnchantments),
@@ -101,7 +102,7 @@ const AdvancedSearch = (props) => {
   };
 
   return (
-    <Container className="mt-4" style={{ marginBottom: 200 }}>
+    <Container className="mt-4">
       <Form>
         <Form.Group>
           <Form.Row>
