@@ -50,7 +50,7 @@ export default class LiveCardService {
       });
   }
 
-  static async getSymbols() {
+  async getSymbols() {
     return await axios
       .get("https://localhost:5001/api/symbology/symbols")
       .then((symbols) => {
@@ -112,5 +112,10 @@ export default class LiveCardService {
       .then((response) => {
         return response.data;
       });
+  }
+
+  getCardBy(id) {
+    return axios.get(`https://api.scryfall.com/cards/${id}`)
+      .then(response => response.data);
   }
 }
