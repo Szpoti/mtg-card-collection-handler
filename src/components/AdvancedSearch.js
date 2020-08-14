@@ -231,7 +231,9 @@ const AdvancedSearch = (props) => {
           </Button>
         </Form.Row>
       </Form>
-      <Loader isLoading={isLoading} />
+      <Container className="mt-5">
+        <Loader isLoading={isLoading} />
+      </Container>
       <Container>
         <LoadedCardsDisplayer loadedCards={cards} />
       </Container>
