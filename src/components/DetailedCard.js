@@ -2,24 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
-import LiveCardService from "../services/LiveCardService";
 import CardPage from "./CardPage";
 
 const DetailedCard = (props) => {
-  const [prints, setPrints] = useState([]);
-  const cardService = new LiveCardService();
-  const [mainCard, setMainCard] = useState(null);
-
-  const loadOtherPrints = async (card) => {
-    const newPrints = await cardService.getOtherPrints(card.oracleId);
-    setPrints(newPrints);
-  };
-
-  useEffect(() => {
-    setMainCard(props.card);
-    loadOtherPrints(props.card);
-  }, []);
-
   return (
     <div>
       <Container className="mt-3">
@@ -34,16 +19,7 @@ const DetailedCard = (props) => {
           </h3>
         </Link>
       </Container>
-      {prints.map((print) => (
-        <Route
-          path={`/${print.name}/${print.id}`}
-          render={(props) => (
-            <React.Fragment>
-              <CardPage card={mainCard} prints={prints} />
-            </React.Fragment>
-          )}
-        />
-      ))}
+      <CardPage card={props.card} match={props.match} />
     </div>
   );
 };

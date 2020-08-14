@@ -136,18 +136,6 @@ const HomePage = (props) => {
           </React.Fragment>
         )}
       />
-
-      {loadedCards.map((card) => (
-        <Route
-          key={card.id}
-          path={`/${card.name}/${card.id}`}
-          render={(props) => (
-            <React.Fragment>
-              <DetailedCard card={card}></DetailedCard>
-            </React.Fragment>
-          )}
-        ></Route>
-      ))}
     </div>
   );
 };
