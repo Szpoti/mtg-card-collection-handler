@@ -76,14 +76,20 @@ const AdvancedSearch = (props) => {
   const [selectedArtists, setSelectedArtists] = useState([]);
   const [cards, setCards] = useState([]);
 
+  const cleanFromMultiselect = (array) => {
+    let r = [];
+    array.forEach(element => r.push(element.label));
+    return r;
+  }
+
   const search = async () => {
     setIsLoading(true);
     const type = {
-      artifacts: selectedArtifacts,
-      enchantments: selectedEnchantments,
-      lands: selectedLands,
-      planeswalkers: selectedPlaneswalkers,
-      creatures: selectedCreatures,
+      artifacts: cleanFromMultiselect(selectedArtifacts),
+      enchantments: cleanFromMultiselect(selectedEnchantments),
+      lands: cleanFromMultiselect(selectedLands),
+      planeswalkers: cleanFromMultiselect(selectedPlaneswalkers),
+      creatures: cleanFromMultiselect(selectedCreatures),
     };
     const price = {
       min: minimumPrice,
