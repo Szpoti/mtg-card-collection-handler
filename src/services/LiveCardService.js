@@ -42,7 +42,6 @@ export default class LiveCardService {
         )}`
       )
       .then((response) => {
-        console.log("response", response);
         if (response.status === 400) {
           return null;
         }
@@ -70,7 +69,9 @@ export default class LiveCardService {
     };
 
     const getRequest = async (endpoint) => {
-      const response = await axios.get("https://api.scryfall.com/catalog" + endpoint);
+      const response = await axios.get(
+        "https://api.scryfall.com/catalog" + endpoint
+      );
       return unwrap(response);
     };
 
@@ -102,20 +103,21 @@ export default class LiveCardService {
   advancedSearch(name, colors, types, price, artists) {
     return axios
       .post(`${this.baseURL}/search/advanced`, {
-          cardName: name,
-          colors: colors,
-          types: types,
-          minPrice: parseFloat(price.min),
-          maxPrice: parseFloat(price.max),
-          artistName: artists[0] === undefined ? "" : artists[0]
+        cardName: name,
+        colors: colors,
+        types: types,
+        minPrice: parseFloat(price.min),
+        maxPrice: parseFloat(price.max),
+        artistName: artists[0] === undefined ? "" : artists[0],
       })
       .then((response) => {
         return response.data;
       });
   }
 
-  getCardBy(id) {
-    return axios.get(`https://api.scryfall.com/cards/${id}`)
-      .then(response => response.data);
+  getCardBy(name) {
+    return axios
+      .get(`https://localhost:5001/api/Card/${name}`)
+      .then((response) => response.data);
   }
 }

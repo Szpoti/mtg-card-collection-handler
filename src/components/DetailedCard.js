@@ -11,7 +11,7 @@ const DetailedCard = (props) => {
         <Link to="/">
           <h3>
             <img
-              src="https://img.scryfall.com/symbology/Q.svg"
+              src="https://c2.scryfall.com/file/scryfall-symbols/card-symbols/Q.svg"
               alt="untap"
               style={{ width: "2%", height: "auto" }}
             ></img>
