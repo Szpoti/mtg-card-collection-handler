@@ -42,7 +42,9 @@ const Filter = (props) => {
               {cardColor.name}
               <img
                 src={
-                  "https://img.scryfall.com/symbology/" + cardColor.id + ".svg"
+                  "https://c2.scryfall.com/file/scryfall-symbols/card-symbols/" +
+                  cardColor.id +
+                  ".svg"
                 }
                 alt={cardColor.name + " mana"}
                 className="mx-1 align-text-top"

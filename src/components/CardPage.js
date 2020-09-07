@@ -10,6 +10,8 @@ const CardPage = (props) => {
   const [prints, setPrints] = useState([]);
   const [card, setCard] = useState(null);
 
+  let symbols = [];
+
   useEffect(() => {
     const loadCardIfNotCached = async () => {
       if (props.card !== undefined) {
@@ -17,10 +19,9 @@ const CardPage = (props) => {
           props.card.imageUri = "/img/missing-card-image.jpg";
         }
         setCard(props.card);
-      }
-      else {
-        const cardId = props.match.params.id;
-        const apiCard = await cardService.getCardBy(cardId);
+      } else {
+        const cardName = props.match.params.name;
+        const apiCard = await cardService.getCardBy(cardName);
 
         if (apiCard.imageUri === null) {
           apiCard.imageUri = "/img/missing-card-image.jpg";
@@ -28,28 +29,19 @@ const CardPage = (props) => {
 
         setCard(apiCard);
       }
-    }
+    };
 
     loadCardIfNotCached();
   }, []);
 
   useEffect(() => {
     const loadOtherPrints = async (mainCard) => {
-      console.log("loadOtherPrints", mainCard)
-      const newPrints = await cardService.getOtherPrints(mainCard.oracle_id);
+      const newPrints = await cardService.getOtherPrints(mainCard.oracleId);
       setPrints(newPrints);
     };
 
-    if (card != null)
-      loadOtherPrints(card);
-  }, [card])
-
-  let symbols = [];
-
-  const capitalize = (s) => {
-    if (typeof s !== "string") return "";
-    return s.charAt(0).toUpperCase() + s.slice(1);
-  };
+    if (card != null) loadOtherPrints(card);
+  }, [card]);
 
   useEffect(() => {
     async function fetchData() {
@@ -57,19 +49,25 @@ const CardPage = (props) => {
       document.getElementById("cardText").innerHTML = insertSvgs(card.text);
     }
 
-    if (card != null)
-      fetchData();
+    if (card != null) fetchData();
   }, [card]);
 
+  const capitalize = (s) => {
+    if (typeof s !== "string") return "";
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  };
+
   const insertSvgs = (fullText) => {
-    if (fullText != null) {
+    if (fullText !== undefined) {
       let newText = fullText;
       let tokens = [];
+
       symbols.forEach((symbol) => {
         if (newText.includes(symbol.sym)) {
           tokens.push(symbol);
         }
       });
+
       tokens.forEach((token) => {
         let url = token.uri;
         let alt = token.sym;
@@ -78,6 +76,7 @@ const CardPage = (props) => {
           newText = newText.replace(alt, tag);
         }
       });
+
       setIsLoading(false);
       document.getElementById("mainPage").style = { mainPageShow };
 
@@ -95,14 +94,14 @@ const CardPage = (props) => {
       <Container>
         <Loader isLoading={isLoading}></Loader>
       </Container>
-    )
+    );
   } else {
     return (
       <Container>
         <div id="mainPage" style={mainPage}>
           <div style={content}>
             <img
-              src={card.image_uris.border_crop}
+              src={card.imageUri}
               alt={card.name}
               style={cardImageStyle}
             ></img>
