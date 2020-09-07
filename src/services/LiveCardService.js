@@ -115,9 +115,9 @@ export default class LiveCardService {
       });
   }
 
-  getCardBy(name) {
+  getCardBy(id) {
     return axios
-      .get(`https://localhost:5001/api/Card/${name}`)
+      .get(`https://localhost:5001/api/Card/byid/${id}`)
       .then((response) => response.data);
   }
 }

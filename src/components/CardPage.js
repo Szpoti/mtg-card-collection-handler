@@ -10,45 +10,47 @@ const CardPage = (props) => {
   const [prints, setPrints] = useState([]);
   const [card, setCard] = useState(null);
 
+  async function fetchData() {
+    symbols = await cardService.getSymbols();
+    document.getElementById("cardText").innerHTML = insertSvgs(card.text);
+  }
+
+  const loadOtherPrints = async (mainCard) => {
+    const newPrints = await cardService.getOtherPrints(mainCard.oracleId);
+    setPrints(newPrints);
+  };
+
+  const loadCardIfNotCached = async () => {
+    if (props.card !== undefined) {
+      console.log("in if");
+      if (props.card.imageUri === null) {
+        props.card.imageUri = "/img/missing-card-image.jpg";
+      }
+      setCard(props.card);
+    } else {
+      console.log("in else");
+      const cardId = props.match.params.id;
+      const apiCard = await cardService.getCardBy(cardId);
+
+      if (apiCard.imageUri === null) {
+        apiCard.imageUri = "/img/missing-card-image.jpg";
+      }
+
+      setCard(apiCard);
+    }
+  };
+
   let symbols = [];
 
   useEffect(() => {
-    const loadCardIfNotCached = async () => {
-      if (props.card !== undefined) {
-        if (props.card.imageUri === null) {
-          props.card.imageUri = "/img/missing-card-image.jpg";
-        }
-        setCard(props.card);
-      } else {
-        const cardName = props.match.params.name;
-        const apiCard = await cardService.getCardBy(cardName);
-
-        if (apiCard.imageUri === null) {
-          apiCard.imageUri = "/img/missing-card-image.jpg";
-        }
-
-        setCard(apiCard);
-      }
-    };
-
     loadCardIfNotCached();
   }, []);
 
   useEffect(() => {
-    const loadOtherPrints = async (mainCard) => {
-      const newPrints = await cardService.getOtherPrints(mainCard.oracleId);
-      setPrints(newPrints);
-    };
-
     if (card != null) loadOtherPrints(card);
   }, [card]);
 
   useEffect(() => {
-    async function fetchData() {
-      symbols = await cardService.getSymbols();
-      document.getElementById("cardText").innerHTML = insertSvgs(card.text);
-    }
-
     if (card != null) fetchData();
   }, [card]);
 
@@ -89,13 +91,7 @@ const CardPage = (props) => {
     }
   };
 
-  if (card === null) {
-    return (
-      <Container>
-        <Loader isLoading={isLoading}></Loader>
-      </Container>
-    );
-  } else {
+  const returnDetails = () => {
     return (
       <Container>
         <div id="mainPage" style={mainPage}>
@@ -156,6 +152,18 @@ const CardPage = (props) => {
         </div>
       </Container>
     );
+  };
+
+  if (card === null) {
+    return (
+      <Container>
+        <Loader isLoading={isLoading}></Loader>
+      </Container>
+    );
+  } else if (props.match.params.id !== card.id) {
+    loadCardIfNotCached();
+  } else {
+    return returnDetails();
   }
 };
 
