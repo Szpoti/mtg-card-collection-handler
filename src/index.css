@@ -16,22 +16,37 @@ code {
     monospace;
 }
 
-.sticky-top {
-  transition: all 1s cubic-bezier(0, 0, 0.2, 1);
-}
-
-html.stuck nav.sticky-top {
-  background-color: rgba(0, 0, 0, 0.9) !important;
-  padding: 3px 0;
-  opacity: 90%;
-}
-
 nav.navbar {
   background-image: url("/img/navbar.jpg") !important;
   background-position: center;
-  padding: 100px 0;
   box-shadow: 0px 2px 10px 5px black;
   background-size: cover;
+}
+
+nav a, nav a:hover {
+  color: white;
+}
+
+.animated-navbar.unscrolled {
+  margin-top: 0px;
+  transition: margin-top 0.5s ease-in;
+}
+
+.animated-navbar.scrolled {
+  margin-top: 200px;
+  transition: margin-top 0.5s ease-in;
+}
+
+.animated-navbar.unscrolled nav {
+  height: 50px;
+  transition: height 0.5s ease-in;
+  opacity: 0.8;
+}
+
+.animated-navbar.scrolled nav {
+  height: 200px;
+  transition: height 0.5s ease-out;
+  opacity: 1.0;
 }
 
 div.container > a.navbar-brand {
