@@ -8,7 +8,7 @@ const LoadedCardsDisplayer = (props) => {
       <Row className="d-flex flex-wrap">
         {props.loadedCards.map((card) => (
           <Col key={card.id} xs={4} md={3} className="p-3">
-            <Link to={`/${card.name}/${card.id}`}>
+            <Link to={`/card/${card.name}/${card.id}`}>
               <img
                 src={card.imageUri === null ? "/img/missing-card-image.jpg" : card.imageUri}
                 className="img-fluid zoom"

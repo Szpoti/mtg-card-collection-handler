@@ -1,6 +1,10 @@
 import axios from "axios";
 
 export default class LiveCardService {
+  constructor() {
+    this.baseURL = "https://localhost:5001/api";
+  }
+
   useFilter(cards, colors) {
     if (colors.length <= 0) {
       return cards;
@@ -46,7 +50,7 @@ export default class LiveCardService {
       });
   }
 
-  static async getSymbols() {
+  async getSymbols() {
     return await axios
       .get("https://localhost:5001/api/symbology/symbols")
       .then((symbols) => {
@@ -58,5 +62,60 @@ export default class LiveCardService {
     await axios.get("https://localhost:5001/api/Cards").then((cards) => {
       callback(cards.data);
     });
+  }
+
+  getCatalog() {
+    const unwrap = (response) => {
+      return response.data.data;
+    };
+
+    const getRequest = async (endpoint) => {
+      const response = await axios.get("https://api.scryfall.com/catalog" + endpoint);
+      return unwrap(response);
+    };
+
+    return {
+      forArtifacts: () => {
+        return getRequest("/artifact-types");
+      },
+      forEnchantments: () => {
+        return getRequest("/enchantment-types");
+      },
+      forLands: () => {
+        return getRequest("/land-types");
+      },
+      forSpells: () => {
+        return getRequest("/spell-types");
+      },
+      forPlaneswalkers: () => {
+        return getRequest("/planeswalker-types");
+      },
+      forCreatures: () => {
+        return getRequest("/creature-types");
+      },
+      forArtistNames: () => {
+        return getRequest("/artist-names");
+      },
+    };
+  }
+
+  advancedSearch(name, colors, types, price, artists) {
+    return axios
+      .post(`${this.baseURL}/search/advanced`, {
+          cardName: name,
+          colors: colors,
+          types: types,
+          minPrice: parseFloat(price.min),
+          maxPrice: parseFloat(price.max),
+          artistName: artists[0] === undefined ? "" : artists[0]
+      })
+      .then((response) => {
+        return response.data;
+      });
+  }
+
+  getCardBy(id) {
+    return axios.get(`https://api.scryfall.com/cards/${id}`)
+      .then(response => response.data);
   }
 }

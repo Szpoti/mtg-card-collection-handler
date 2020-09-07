@@ -1,11 +1,48 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
-import { BrowserRouter as Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import LiveCardService from "../services/LiveCardService";
 import Loader from "./Loader";
 
 const CardPage = (props) => {
+  const cardService = new LiveCardService();
   const [isLoading, setIsLoading] = useState(true);
+  const [prints, setPrints] = useState([]);
+  const [card, setCard] = useState(null);
+
+  useEffect(() => {
+    const loadCardIfNotCached = async () => {
+      if (props.card !== undefined) {
+        if (props.card.imageUri === null) {
+          props.card.imageUri = "/img/missing-card-image.jpg";
+        }
+        setCard(props.card);
+      }
+      else {
+        const cardId = props.match.params.id;
+        const apiCard = await cardService.getCardBy(cardId);
+
+        if (apiCard.imageUri === null) {
+          apiCard.imageUri = "/img/missing-card-image.jpg";
+        }
+
+        setCard(apiCard);
+      }
+    }
+
+    loadCardIfNotCached();
+  }, []);
+
+  useEffect(() => {
+    const loadOtherPrints = async (mainCard) => {
+      console.log("loadOtherPrints", mainCard)
+      const newPrints = await cardService.getOtherPrints(mainCard.oracle_id);
+      setPrints(newPrints);
+    };
+
+    if (card != null)
+      loadOtherPrints(card);
+  }, [card])
 
   let symbols = [];
 
@@ -16,13 +53,13 @@ const CardPage = (props) => {
 
   useEffect(() => {
     async function fetchData() {
-      symbols = await LiveCardService.getSymbols();
-      document.getElementById("cardText").innerHTML = insertSvgs(
-        props.card.text
-      );
+      symbols = await cardService.getSymbols();
+      document.getElementById("cardText").innerHTML = insertSvgs(card.text);
     }
-    fetchData();
-  }, []);
+
+    if (card != null)
+      fetchData();
+  }, [card]);
 
   const insertSvgs = (fullText) => {
     if (fullText != null) {
@@ -53,71 +90,74 @@ const CardPage = (props) => {
     }
   };
 
-  if (props.card.imageUri === null) {
-    props.card.imageUri = "/img/missing-card-image.jpg";
-  }
-
-  return (
-    <Container>
-      <Loader isLoading={isLoading}></Loader>
-      <div id="mainPage" style={mainPage}>
-        <div style={content}>
-          <img
-            src={props.card.imageUri}
-            alt={props.card.name}
-            style={cardImageStyle}
-          ></img>
-          <div style={detailsStyle}>
-            <span>
-              <strong>Name:</strong> {props.card.name}
-            </span>
-            <br />
-            <span>
-              <strong>Rarity:</strong> {capitalize(props.card.rarity)}
-            </span>
-            <br />
-            <span>
-              <strong>Expansion set:</strong> {props.card.setName} (
-              {props.card.set.toUpperCase()})
-            </span>
-            <br />
-            <span>
-              <strong>Type:</strong> {props.card.type}
-            </span>
-            <br />
-            <span>
-              <strong>Price trend:</strong>
-              {props.card.price}
-            </span>
-            <br />
-            <div id="cardText" className="textStyle" style={textStyle}>
-              {props.card.text}
+  if (card === null) {
+    return (
+      <Container>
+        <Loader isLoading={isLoading}></Loader>
+      </Container>
+    )
+  } else {
+    return (
+      <Container>
+        <div id="mainPage" style={mainPage}>
+          <div style={content}>
+            <img
+              src={card.image_uris.border_crop}
+              alt={card.name}
+              style={cardImageStyle}
+            ></img>
+            <div style={detailsStyle}>
+              <span>
+                <strong>Name:</strong> {card.name}
+              </span>
+              <br />
+              <span>
+                <strong>Rarity:</strong> {capitalize(card.rarity)}
+              </span>
+              <br />
+              <span>
+                <strong>Expansion set:</strong> {card.setName} (
+                {card.set.toUpperCase()})
+              </span>
+              <br />
+              <span>
+                <strong>Type:</strong> {card.type}
+              </span>
+              <br />
+              <span>
+                <strong>Price trend:</strong>
+                {card.price}
+              </span>
+              <br />
+              <div id="cardText" className="textStyle" style={textStyle}>
+                {card.text}
+              </div>
             </div>
           </div>
-        </div>
-        <table style={tableStyle}>
-          <thead>
-            <tr>
-              <th>Set name</th>
-              <th>Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            {props.prints.map((cardPrint) => (
+          <table style={tableStyle}>
+            <thead>
               <tr>
-                <td>
-                  <Link to={`/${cardPrint.name}/${cardPrint.id}`}>
-                    {cardPrint.setName}
-                  </Link>
-                </td>
-                <td>{cardPrint.price}</td>
+                <th>Set name</th>
+                <th>Price</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </Container>
-  );
+            </thead>
+            <tbody>
+              {prints.map((cardPrint) => (
+                <tr>
+                  <td>
+                    <Link to={`/card/${cardPrint.name}/${cardPrint.id}`}>
+                      {cardPrint.setName}
+                    </Link>
+                  </td>
+                  <td>{cardPrint.price}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Container>
+    );
+  }
 };
 
 const mainPage = {

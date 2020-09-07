@@ -108,9 +108,14 @@ const HomePage = (props) => {
                         setIsLoading={setIsLoading}
                         colors={colors}
                       />
-                      <ColorProvider>
-                        <Filter setHomeColors={setColors} />
-                      </ColorProvider>
+                      <div className="text-center text-md-right mt-3">
+                        <ColorProvider>
+                          <Filter
+                            setHomeColors={setColors}
+                            isDisabled={false}
+                          />
+                        </ColorProvider>
+                      </div>
                       <p id="searchBarErrorMsg"></p>
                     </Col>
                   </Row>
@@ -131,18 +136,6 @@ const HomePage = (props) => {
           </React.Fragment>
         )}
       />
-
-      {loadedCards.map((card) => (
-        <Route
-          key={card.id}
-          path={`/${card.name}/${card.id}`}
-          render={(props) => (
-            <React.Fragment>
-              <DetailedCard card={card}></DetailedCard>
-            </React.Fragment>
-          )}
-        ></Route>
-      ))}
     </div>
   );
 };

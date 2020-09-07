@@ -23,4 +23,54 @@ export default class OfflineCardService {
   search(title) {
     return this.getAll();
   }
+
+  useFilter(cards, colors) {
+    return this.getAll();
+  }
+
+  getOtherPrints(url) {
+    return new Promise((resolve) => resolve([]));
+  }
+
+  getCatalog() {
+    const sleep = (ms) => {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    };
+
+    const randomIntFromInterval = (min, max) => {
+      // min and max included
+      // https://stackoverflow.com/a/7228322/7306734
+      return Math.floor(Math.random() * (max - min + 1) + min);
+    };
+
+    const getRequest = () => {
+      return sleep(randomIntFromInterval(1, 5) * 1000).then(() => {
+        return ["one", "two"];
+      });
+    };
+
+    return {
+      forArtifacts: () => {
+        return getRequest();
+      },
+      forEnchantments: () => {
+        return getRequest();
+      },
+      forLands: () => {
+        return getRequest();
+      },
+      forSpells: () => {
+        return getRequest();
+      },
+      forPlaneswalkers: () => {
+        return getRequest();
+      },
+      forCreatures: () => {
+        return getRequest();
+      },
+      forArtistNames: () => {
+        return getRequest();
+      },
+    };
+  }
 }
