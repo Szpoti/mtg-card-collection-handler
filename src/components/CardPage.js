@@ -10,7 +10,7 @@ const CardPage = (props) => {
   const [prints, setPrints] = useState([]);
   const [card, setCard] = useState(null);
 
-  async function fetchData() {
+  async function fetchSymbols() {
     symbols = await cardService.getSymbols();
     document.getElementById("cardText").innerHTML = insertSvgs(card.text);
   }
@@ -35,8 +35,8 @@ const CardPage = (props) => {
       if (apiCard.imageUri === null) {
         apiCard.imageUri = "/img/missing-card-image.jpg";
       }
-
       setCard(apiCard);
+      setIsLoading(false);
     }
   };
 
@@ -47,11 +47,10 @@ const CardPage = (props) => {
   }, []);
 
   useEffect(() => {
-    if (card != null) loadOtherPrints(card);
-  }, [card]);
-
-  useEffect(() => {
-    if (card != null) fetchData();
+    if (card !== null) {
+      loadOtherPrints(card);
+      fetchSymbols();
+    }
   }, [card]);
 
   const capitalize = (s) => {
@@ -94,6 +93,7 @@ const CardPage = (props) => {
   const returnDetails = () => {
     return (
       <Container>
+        <Loader isLoading={isLoading}></Loader>
         <div id="mainPage" style={mainPage}>
           <div style={content}>
             <img
@@ -154,6 +154,11 @@ const CardPage = (props) => {
     );
   };
 
+  const loadNewCard = () => {
+    setCard(null);
+    loadCardIfNotCached();
+  };
+
   if (card === null) {
     return (
       <Container>
@@ -161,7 +166,8 @@ const CardPage = (props) => {
       </Container>
     );
   } else if (props.match.params.id !== card.id) {
-    loadCardIfNotCached();
+    setIsLoading(true);
+    loadNewCard();
   } else {
     return returnDetails();
   }
