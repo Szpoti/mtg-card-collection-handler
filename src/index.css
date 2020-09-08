@@ -24,13 +24,13 @@ nav.navbar {
   background-size: cover;
 }
 
-div.container > a.navbar-brand {
+div.container > span.navbar-brand a {
   color: white;
   font-weight: 800;
   text-shadow: 3px 3px 3px black;
 }
 
-div.container > a.navbar-brand:hover {
+div.container > span.navbar-brand a:hover {
   color: white;
 }
 
