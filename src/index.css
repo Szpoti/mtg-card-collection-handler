@@ -16,16 +16,6 @@ code {
     monospace;
 }
 
-.sticky-top {
-  transition: all 1s cubic-bezier(0, 0, 0.2, 1);
-}
-
-html.stuck nav.sticky-top {
-  background-color: rgba(0, 0, 0, 0.9) !important;
-  padding: 3px 0;
-  opacity: 90%;
-}
-
 nav.navbar {
   background-image: url("/img/navbar.jpg") !important;
   background-position: center;
@@ -34,13 +24,13 @@ nav.navbar {
   background-size: cover;
 }
 
-div.container > a.navbar-brand {
+div.container > span.navbar-brand a {
   color: white;
   font-weight: 800;
   text-shadow: 3px 3px 3px black;
 }
 
-div.container > a.navbar-brand:hover {
+div.container > span.navbar-brand a:hover {
   color: white;
 }
 
