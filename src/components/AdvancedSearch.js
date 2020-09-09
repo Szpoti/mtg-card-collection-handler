@@ -6,65 +6,12 @@ import Filter from "./Filter";
 import CustomMultiSelect from "./CustomMultiSelect";
 import Loader from "./Loader";
 import LoadedCardsDisplayer from "./LoadedCardsDisplayer";
-import Pagination from "./Pagination";
+import Pagination, { getPaginationCards } from "./Pagination";
 
 const AdvancedSearch = (props) => {
   const cardService = props.cardService;
 
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    setIsLoading(true);
-    const fetchData = async () => {
-      const stringArrayToMultiSelect = (array) => {
-        return array.map((item, index) => {
-          return { label: item, value: index };
-        });
-      };
-
-      const catalog = cardService.getCatalog();
-      const promises = [
-        catalog
-          .forArtifacts()
-          .then((artifacts) =>
-            setAllArtifacts(stringArrayToMultiSelect(artifacts))
-          ),
-        catalog
-          .forEnchantments()
-          .then((enchantments) =>
-            setAllEnchantments(stringArrayToMultiSelect(enchantments))
-          ),
-        catalog
-          .forLands()
-          .then((lands) => setAllLands(stringArrayToMultiSelect(lands))),
-        catalog
-          .forPlaneswalkers()
-          .then((planeswalkers) =>
-            setAllPlaneswalkers(stringArrayToMultiSelect(planeswalkers))
-          ),
-        catalog
-          .forCreatures()
-          .then((creatures) =>
-            setAllCreatures(stringArrayToMultiSelect(creatures))
-          ),
-        catalog
-          .forArtistNames()
-          .then((artists) => setAllArtists(stringArrayToMultiSelect(artists))),
-      ];
-      await Promise.all(promises);
-
-      setIsLoading(false);
-      console.log("currentPage !== undefined", currentPage !== undefined);
-      console.log("cards.length === 0", cards.length === 0);
-      if (cards.length === 0 && currentPage !== undefined) {
-        console.log("redirecting");
-        setCurrentPage(undefined);
-        history.push("/search");
-      }
-    };
-
-    fetchData();
-  }, [cardService]);
 
   const history = useHistory();
 
@@ -88,6 +35,66 @@ const AdvancedSearch = (props) => {
   const [currentPage, setCurrentPage] = useState(props.match.params.page);
   const [cards, setCards] = useState([]);
   const [cardsToDisplay, setCardsToDisplay] = useState([]);
+
+  useEffect(() => {
+    if (cards.length === 0) {
+      console.log("cards", cards);
+      setIsLoading(true);
+      const fetchData = async () => {
+        const stringArrayToMultiSelect = (array) => {
+          return array.map((item, index) => {
+            return { label: item, value: index };
+          });
+        };
+
+        const catalog = cardService.getCatalog();
+        const promises = [
+          catalog
+            .forArtifacts()
+            .then((artifacts) =>
+              setAllArtifacts(stringArrayToMultiSelect(artifacts))
+            ),
+          catalog
+            .forEnchantments()
+            .then((enchantments) =>
+              setAllEnchantments(stringArrayToMultiSelect(enchantments))
+            ),
+          catalog
+            .forLands()
+            .then((lands) => setAllLands(stringArrayToMultiSelect(lands))),
+          catalog
+            .forPlaneswalkers()
+            .then((planeswalkers) =>
+              setAllPlaneswalkers(stringArrayToMultiSelect(planeswalkers))
+            ),
+          catalog
+            .forCreatures()
+            .then((creatures) =>
+              setAllCreatures(stringArrayToMultiSelect(creatures))
+            ),
+          catalog
+            .forArtistNames()
+            .then((artists) =>
+              setAllArtists(stringArrayToMultiSelect(artists))
+            ),
+        ];
+        await Promise.all(promises);
+
+        setIsLoading(false);
+        console.log("currentPage !== undefined", currentPage !== undefined);
+        console.log("cards.length === 0", cards.length === 0);
+        if (cards.length === 0 && currentPage !== undefined) {
+          console.log("redirecting");
+          setCurrentPage(undefined);
+          history.push("/search");
+        }
+      };
+      fetchData();
+    } else {
+      setCardsToDisplay(getPaginationCards(currentPage, cards));
+      console.log("cardsToDisplay", cardsToDisplay);
+    }
+  }, [currentPage]);
 
   const cleanFromMultiselect = (array) => {
     let r = [];
@@ -116,8 +123,9 @@ const AdvancedSearch = (props) => {
       price,
       selectedArtists
     );
-    setCards(foundCards);
     setIsLoading(false);
+    setCards(foundCards);
+    setCardsToDisplay(getPaginationCards(1, foundCards));
     setCurrentPage(1);
   };
 
@@ -254,18 +262,20 @@ const AdvancedSearch = (props) => {
           </Button>
         </Form.Row>
       </Form>
-      <Container className="mt-5">
-        <Loader isLoading={isLoading} />
-      </Container>
       <Container>
         <Pagination
           cards={cards}
+          setCurrentPage={setCurrentPage}
           currentPage={currentPage}
           setCardsToDisplay={setCardsToDisplay}
         />
+        <Container className="mt-5">
+          <Loader isLoading={isLoading} />
+        </Container>
         <LoadedCardsDisplayer loadedCards={cardsToDisplay} />
         <Pagination
           cards={cards}
+          setCurrentPage={setCurrentPage}
           currentPage={currentPage}
           setCardsToDisplay={setCardsToDisplay}
         />

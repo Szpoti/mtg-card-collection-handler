@@ -2,22 +2,31 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 export default function Pagination(props) {
-  useEffect(() => {}, [props.cards]);
-
   console.log("props.currentPage", props.currentPage);
   console.log("props.cards.length", props.cards.length);
+
   if (props.currentPage === undefined || props.cards.length < 33) {
     return null;
   }
+
   const ALLPAGES = props.cards.length / 32;
+
+  const changeCurrentPage = (val) => {
+    props.setCurrentPage(val);
+  };
 
   const Pages = () => {
     const buttons = [];
     for (let i = 0; i <= ALLPAGES; i++) {
-      if (i === props.currentPage) {
+      if (i + 1 === props.currentPage) {
         buttons.push(
           <li className="page-item active">
-            <Link to={`/search/${i + 1}`} className="page-link">
+            <Link
+              to={`/search/${i + 1}`}
+              className="page-link"
+              onClick={() => changeCurrentPage(i + 1)}
+              //onClick={props.setCurrentPage(i + 1)}
+            >
               {i + 1}
             </Link>
           </li>
@@ -25,7 +34,11 @@ export default function Pagination(props) {
       } else {
         buttons.push(
           <li className="page-item">
-            <Link to={`/search/${i + 1}`} className="page-link">
+            <Link
+              to={`/search/${i + 1}`}
+              className="page-link"
+              onClick={() => changeCurrentPage(i + 1)}
+            >
               {i + 1}
             </Link>
           </li>
@@ -36,22 +49,13 @@ export default function Pagination(props) {
     return buttons;
   };
 
-  const getCardsToDisplay = () => {
-    let startIndex = (props.currentPage - 1) * 32;
-    let endIndex = startIndex + 32;
-    let arr = props.cards.slice(startIndex, endIndex);
-    console.log("arr", arr);
-    return arr;
-  };
-
-  props.setCardsToDisplay(getCardsToDisplay());
-
   return (
     <nav className="d-flex justify-content-center">
       <ul className="pagination">
         <li className="page-item disabled">
           <Link
             to={`/search/${props.currentPage - 1}`}
+            onClick={() => changeCurrentPage(props.currentPage - 1)}
             className="page-link"
             aria-label="Previous"
           >
@@ -62,6 +66,7 @@ export default function Pagination(props) {
         <li className="page-item">
           <Link
             to={`/search/${props.currentPage + 1}`}
+            onClick={() => changeCurrentPage(props.currentPage + 1)}
             className="page-link"
             aria-label="Next"
           >
@@ -72,3 +77,17 @@ export default function Pagination(props) {
     </nav>
   );
 }
+
+const getCardsToDisplay = (currentPage, cards) => {
+  let startIndex = (currentPage - 1) * 32;
+  let endIndex = startIndex + 32;
+  let arr = cards.slice(startIndex, endIndex);
+  console.log("arr", arr);
+  return arr;
+};
+
+export const getPaginationCards = (currentPage, cards) => {
+  let arr = getCardsToDisplay(currentPage, cards);
+  console.log("arr", arr);
+  return arr;
+};
