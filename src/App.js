@@ -36,8 +36,10 @@ const App = (props) => {
         ></Route>
         <Route
           key="search"
-          path="/search"
-          render={() => <AdvancedSearch cardService={cardService} />}
+          path="/search/:page?"
+          render={(props) => (
+            <AdvancedSearch cardService={cardService} match={props.match} />
+          )}
         ></Route>
       </Router>
     </div>

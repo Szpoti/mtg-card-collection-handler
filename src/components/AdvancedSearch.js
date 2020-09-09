@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Button, Container, Form, Col, Row } from "react-bootstrap";
+import { Link, useHistory } from "react-router-dom";
 import { ColorProvider } from "./ColorProvider";
 import Filter from "./Filter";
 import CustomMultiSelect from "./CustomMultiSelect";
 import Loader from "./Loader";
 import LoadedCardsDisplayer from "./LoadedCardsDisplayer";
+import Pagination from "./Pagination";
 
 const AdvancedSearch = (props) => {
   const cardService = props.cardService;
@@ -52,10 +54,19 @@ const AdvancedSearch = (props) => {
       await Promise.all(promises);
 
       setIsLoading(false);
+      console.log("currentPage !== undefined", currentPage !== undefined);
+      console.log("cards.length === 0", cards.length === 0);
+      if (cards.length === 0 && currentPage !== undefined) {
+        console.log("redirecting");
+        setCurrentPage(undefined);
+        history.push("/search");
+      }
     };
 
     fetchData();
   }, [cardService]);
+
+  const history = useHistory();
 
   const [colors, setColors] = useState([]);
   const [allArtifacts, setAllArtifacts] = useState([]);
@@ -74,13 +85,15 @@ const AdvancedSearch = (props) => {
   const [minimumPrice, setMinimumPrice] = useState(0);
   const [maximumPrice, setMaximumPrice] = useState(Number.MAX_VALUE);
   const [selectedArtists, setSelectedArtists] = useState([]);
+  const [currentPage, setCurrentPage] = useState(props.match.params.page);
   const [cards, setCards] = useState([]);
+  const [cardsToDisplay, setCardsToDisplay] = useState([]);
 
   const cleanFromMultiselect = (array) => {
     let r = [];
-    array.forEach(element => r.push(element.label));
+    array.forEach((element) => r.push(element.label));
     return r;
-  }
+  };
 
   const search = async () => {
     setIsLoading(true);
@@ -96,9 +109,16 @@ const AdvancedSearch = (props) => {
       min: minimumPrice,
       max: maximumPrice,
     };
-    const foundCards = await cardService.advancedSearch(name, colors, type, price, selectedArtists);
+    const foundCards = await cardService.advancedSearch(
+      name,
+      colors,
+      type,
+      price,
+      selectedArtists
+    );
     setCards(foundCards);
     setIsLoading(false);
+    setCurrentPage(1);
   };
 
   return (
@@ -112,7 +132,7 @@ const AdvancedSearch = (props) => {
             <Col xs={12} md={9}>
               <Form.Control
                 type="text"
-                onChange={e => setName(e.target.value)}
+                onChange={(e) => setName(e.target.value)}
                 disabled={isLoading}
                 placeholder='Any words in the name, e.g. "Fire"'
               />
@@ -196,17 +216,17 @@ const AdvancedSearch = (props) => {
               <Form.Row className="m-0">
                 <Form.Control
                   type="text"
-                  onChange={e => setMinimumPrice(e.target.value)}
+                  onChange={(e) => setMinimumPrice(e.target.value)}
                   disabled={isLoading}
                   className="col-3 mr-3"
-                  placeholder='Minimum'
+                  placeholder="Minimum"
                 />
                 <Form.Control
                   type="text"
-                  onChange={e => setMaximumPrice(e.target.value)}
+                  onChange={(e) => setMaximumPrice(e.target.value)}
                   disabled={isLoading}
                   className="col-3"
-                  placeholder='Maximum'
+                  placeholder="Maximum"
                 />
               </Form.Row>
             </Col>
@@ -230,7 +250,7 @@ const AdvancedSearch = (props) => {
         </Form.Group>
         <Form.Row className="justify-content-center">
           <Button onClick={search} disabled={isLoading}>
-            Search
+            <Link to={`search/${1}`}>Search</Link>
           </Button>
         </Form.Row>
       </Form>
@@ -238,7 +258,17 @@ const AdvancedSearch = (props) => {
         <Loader isLoading={isLoading} />
       </Container>
       <Container>
-        <LoadedCardsDisplayer loadedCards={cards} />
+        <Pagination
+          cards={cards}
+          currentPage={currentPage}
+          setCardsToDisplay={setCardsToDisplay}
+        />
+        <LoadedCardsDisplayer loadedCards={cardsToDisplay} />
+        <Pagination
+          cards={cards}
+          currentPage={currentPage}
+          setCardsToDisplay={setCardsToDisplay}
+        />
       </Container>
     </Container>
   );

@@ -8,7 +8,6 @@ import Pagination from "./Pagination";
 import Search from "./Search";
 import Filter from "./Filter";
 import { ColorProvider } from "./ColorProvider";
-import DetailedCard from "./DetailedCard";
 
 const HomePage = (props) => {
   const [user, setUser] = useState();
@@ -28,8 +27,7 @@ const HomePage = (props) => {
   };
 
   const handleLogout = () => {
-    authService.logOut()
-    .then(r => setUser());
+    authService.logOut().then((r) => setUser());
   };
 
   const LoginBar = (props) => {
