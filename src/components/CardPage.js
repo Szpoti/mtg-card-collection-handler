@@ -16,6 +16,7 @@ const CardPage = (props) => {
     symbols = await cardService.getSymbols();
     if (textDisplayer.current !== null) {
       textDisplayer.current.innerHTML = insertSvgs(card.text);
+      setIsLoading(false);
     }
   }
 
@@ -38,7 +39,6 @@ const CardPage = (props) => {
         apiCard.imageUri = "/img/missing-card-image.jpg";
       }
       setCard(apiCard);
-      setIsLoading(false);
     }
   };
 
@@ -81,13 +81,11 @@ const CardPage = (props) => {
       });
       if (mainPageRef.current !== null) {
         mainPageRef.current.style = { mainPageShow };
-        setIsLoading(false);
       }
       return newText;
     } else {
       if (mainPageRef.current !== null) {
         mainPageRef.current.style = { mainPageShow };
-        setIsLoading(false);
       }
       return "Text not found";
     }
@@ -174,7 +172,6 @@ const CardPage = (props) => {
       </div>
     );
   } else if (props.match.params.id !== card.id) {
-    setIsLoading(true);
     loadNewCard();
   } else {
     return returnDetails();

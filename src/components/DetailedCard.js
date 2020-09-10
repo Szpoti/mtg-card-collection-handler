@@ -6,7 +6,6 @@ import CardPage from "./CardPage";
 
 const DetailedCard = (props) => {
   const history = useHistory();
-
   return (
     <div>
       <Container className="mt-3">

@@ -36,6 +36,13 @@ const AdvancedSearch = (props) => {
   const [currentPage, setCurrentPage] = useState(props.match.params.page);
   const [cards, setCards] = useState([]);
   const [cardsToDisplay, setCardsToDisplay] = useState([]);
+
+  const stringArrayToMultiSelect = (array) => {
+    return array.map((item, index) => {
+      return { label: item, value: index };
+    });
+  };
+
   var dataToSave = {
     allCards: cards,
     saveAllCards: Storage.saveAllCards,
@@ -62,49 +69,58 @@ const AdvancedSearch = (props) => {
   useEffect(() => {
     if (cards.length === 0) {
       setIsLoading(true);
-      const fetchData = async () => {
-        const stringArrayToMultiSelect = (array) => {
-          return array.map((item, index) => {
-            return { label: item, value: index };
-          });
+      if (Storage.getArtists().length === 0) {
+        const fetchData = async () => {
+          const catalog = cardService.getCatalog();
+          const promises = [
+            catalog.forArtifacts().then((artifacts) => {
+              setAllArtifacts(stringArrayToMultiSelect(artifacts));
+              Storage.saveArtifactTypes(artifacts);
+            }),
+            catalog.forEnchantments().then((enchantments) => {
+              setAllEnchantments(stringArrayToMultiSelect(enchantments));
+              Storage.saveEnchantmentTypes(enchantments);
+            }),
+            catalog.forLands().then((lands) => {
+              setAllLands(stringArrayToMultiSelect(lands));
+              Storage.saveLandTypes(lands);
+            }),
+            catalog.forPlaneswalkers().then((planeswalkers) => {
+              setAllPlaneswalkers(stringArrayToMultiSelect(planeswalkers));
+              Storage.savePlaneswalkerTypes(planeswalkers);
+            }),
+            catalog.forCreatures().then((creatures) => {
+              setAllCreatures(stringArrayToMultiSelect(creatures));
+              Storage.saveCreatureTypes(creatures);
+            }),
+            catalog.forArtistNames().then((artists) => {
+              setAllArtists(stringArrayToMultiSelect(artists));
+              Storage.saveArtists(artists);
+            }),
+          ];
+          await Promise.all(promises);
+
+          setIsLoading(false);
         };
+        fetchData();
+      } else {
+        setAllArtifacts(stringArrayToMultiSelect(Storage.getArtifactTypes()));
 
-        const catalog = cardService.getCatalog();
-        const promises = [
-          catalog
-            .forArtifacts()
-            .then((artifacts) =>
-              setAllArtifacts(stringArrayToMultiSelect(artifacts))
-            ),
-          catalog
-            .forEnchantments()
-            .then((enchantments) =>
-              setAllEnchantments(stringArrayToMultiSelect(enchantments))
-            ),
-          catalog
-            .forLands()
-            .then((lands) => setAllLands(stringArrayToMultiSelect(lands))),
-          catalog
-            .forPlaneswalkers()
-            .then((planeswalkers) =>
-              setAllPlaneswalkers(stringArrayToMultiSelect(planeswalkers))
-            ),
-          catalog
-            .forCreatures()
-            .then((creatures) =>
-              setAllCreatures(stringArrayToMultiSelect(creatures))
-            ),
-          catalog
-            .forArtistNames()
-            .then((artists) =>
-              setAllArtists(stringArrayToMultiSelect(artists))
-            ),
-        ];
-        await Promise.all(promises);
+        setAllEnchantments(
+          stringArrayToMultiSelect(Storage.getEnchantmentTypes())
+        );
 
+        setAllLands(stringArrayToMultiSelect(Storage.getLandTypes()));
+
+        setAllPlaneswalkers(
+          stringArrayToMultiSelect(Storage.getPlaneswalkerTypes())
+        );
+
+        setAllCreatures(stringArrayToMultiSelect(Storage.getCreatureTypes()));
+
+        setAllArtists(stringArrayToMultiSelect(Storage.getArtists()));
         setIsLoading(false);
-      };
-      fetchData();
+      }
     } else {
       setCardsToDisplay(getPaginationCards(currentPage, cards));
     }
@@ -119,6 +135,7 @@ const AdvancedSearch = (props) => {
   const search = async () => {
     setIsLoading(true);
     setCards([]);
+    setCardsToDisplay([]);
     const type = {
       artifacts: cleanFromMultiselect(selectedArtifacts),
       enchantments: cleanFromMultiselect(selectedEnchantments),
@@ -137,11 +154,18 @@ const AdvancedSearch = (props) => {
       price,
       selectedArtists
     );
-    setIsLoading(false);
-    setCards(foundCards);
-    const displayCards = getPaginationCards(1, foundCards);
-    setCardsToDisplay(displayCards);
-    setCurrentPage(1);
+    if (foundCards.length > 0) {
+      setCards(foundCards);
+      setIsLoading(false);
+      const displayCards = getPaginationCards(1, foundCards);
+      setCardsToDisplay(displayCards);
+      setCurrentPage(1);
+    } else {
+      setCards([]);
+      setIsLoading(false);
+      setCardsToDisplay(null);
+      setCurrentPage(1);
+    }
   };
 
   return (

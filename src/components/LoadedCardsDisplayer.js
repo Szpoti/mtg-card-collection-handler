@@ -11,8 +11,9 @@ const LoadedCardsDisplayer = (props) => {
       data.saveCurrentPage(data.currentPage);
     }
   };
-
-  if (props.loadedCards !== undefined || props.loadedCards.length <= 0) {
+  if (props.loadedCards === null) {
+    return <div>Sorry, no cards found...please try again</div>;
+  } else if (props.loadedCards !== undefined && props.loadedCards.length >= 0) {
     return (
       <Row className="d-flex flex-wrap">
         {props.loadedCards.map((card) => (
@@ -33,8 +34,6 @@ const LoadedCardsDisplayer = (props) => {
         ))}
       </Row>
     );
-  } else {
-    return <div>No cards found</div>;
   }
 };
 
