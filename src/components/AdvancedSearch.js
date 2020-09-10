@@ -7,6 +7,7 @@ import CustomMultiSelect from "./CustomMultiSelect";
 import Loader from "./Loader";
 import LoadedCardsDisplayer from "./LoadedCardsDisplayer";
 import Pagination, { getPaginationCards } from "./Pagination";
+import Storage from "../services/DataStorageService";
 
 const AdvancedSearch = (props) => {
   const cardService = props.cardService;
@@ -35,10 +36,24 @@ const AdvancedSearch = (props) => {
   const [currentPage, setCurrentPage] = useState(props.match.params.page);
   const [cards, setCards] = useState([]);
   const [cardsToDisplay, setCardsToDisplay] = useState([]);
+  var dataToSave = {
+    allCards: cards,
+    saveAllCards: Storage.saveAllCards,
+    cardsToDisplay: cardsToDisplay,
+    saveCardsToDisplay: Storage.saveDisplayableCards,
+    currentPage: currentPage,
+    saveCurrentPage: Storage.saveCurrentPage,
+  };
 
   useEffect(() => {
-    console.log("cards", cards);
-    if (cards.length === 0 || currentPage !== undefined) {
+    var storedCards = Storage.getDisplayableCards();
+    if (storedCards.length > 0) {
+      var allCards = Storage.getAllCards();
+      var currPage = Storage.getCurrentPage();
+      setCardsToDisplay(storedCards);
+      setCards(allCards);
+      setCurrentPage(currPage);
+    } else if (cards.length === 0 || currentPage !== undefined) {
       setCurrentPage(undefined);
       history.push("/search");
     }
@@ -124,7 +139,8 @@ const AdvancedSearch = (props) => {
     );
     setIsLoading(false);
     setCards(foundCards);
-    setCardsToDisplay(getPaginationCards(1, foundCards));
+    const displayCards = getPaginationCards(1, foundCards);
+    setCardsToDisplay(displayCards);
     setCurrentPage(1);
   };
 
@@ -271,7 +287,10 @@ const AdvancedSearch = (props) => {
         <Container className="mt-5">
           <Loader isLoading={isLoading} />
         </Container>
-        <LoadedCardsDisplayer loadedCards={cardsToDisplay} />
+        <LoadedCardsDisplayer
+          loadedCards={cardsToDisplay}
+          dataToSave={dataToSave}
+        />
         <Pagination
           cards={cards}
           setCurrentPage={setCurrentPage}
