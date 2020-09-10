@@ -18,6 +18,7 @@ const App = (props) => {
       <Router>
         <Header />
         <Route
+          exact
           key="home"
           path="/"
           render={() => (

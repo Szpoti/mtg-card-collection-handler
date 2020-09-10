@@ -37,6 +37,7 @@ const AdvancedSearch = (props) => {
   const [cardsToDisplay, setCardsToDisplay] = useState([]);
 
   useEffect(() => {
+    console.log("cards", cards);
     if (cards.length === 0 || currentPage !== undefined) {
       setCurrentPage(undefined);
       history.push("/search");
