@@ -2,9 +2,6 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 export default function Pagination(props) {
-  console.log("props.currentPage", props.currentPage);
-  console.log("props.cards.length", props.cards.length);
-
   if (props.currentPage === undefined || props.cards.length < 33) {
     return null;
   }
@@ -81,13 +78,9 @@ export default function Pagination(props) {
 const getCardsToDisplay = (currentPage, cards) => {
   let startIndex = (currentPage - 1) * 32;
   let endIndex = startIndex + 32;
-  let arr = cards.slice(startIndex, endIndex);
-  console.log("arr", arr);
-  return arr;
+  return cards.slice(startIndex, endIndex);
 };
 
 export const getPaginationCards = (currentPage, cards) => {
-  let arr = getCardsToDisplay(currentPage, cards);
-  console.log("arr", arr);
-  return arr;
+  return getCardsToDisplay(currentPage, cards);
 };

@@ -38,7 +38,6 @@ const AdvancedSearch = (props) => {
 
   useEffect(() => {
     if (cards.length === 0) {
-      console.log("cards", cards);
       setIsLoading(true);
       const fetchData = async () => {
         const stringArrayToMultiSelect = (array) => {
@@ -81,10 +80,7 @@ const AdvancedSearch = (props) => {
         await Promise.all(promises);
 
         setIsLoading(false);
-        console.log("currentPage !== undefined", currentPage !== undefined);
-        console.log("cards.length === 0", cards.length === 0);
         if (cards.length === 0 && currentPage !== undefined) {
-          console.log("redirecting");
           setCurrentPage(undefined);
           history.push("/search");
         }
@@ -92,7 +88,6 @@ const AdvancedSearch = (props) => {
       fetchData();
     } else {
       setCardsToDisplay(getPaginationCards(currentPage, cards));
-      console.log("cardsToDisplay", cardsToDisplay);
     }
   }, [currentPage]);
 

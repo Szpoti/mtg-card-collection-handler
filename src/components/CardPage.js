@@ -22,13 +22,11 @@ const CardPage = (props) => {
 
   const loadCardIfNotCached = async () => {
     if (props.card !== undefined) {
-      console.log("in if");
       if (props.card.imageUri === null) {
         props.card.imageUri = "/img/missing-card-image.jpg";
       }
       setCard(props.card);
     } else {
-      console.log("in else");
       const cardId = props.match.params.id;
       const apiCard = await cardService.getCardBy(cardId);
 
