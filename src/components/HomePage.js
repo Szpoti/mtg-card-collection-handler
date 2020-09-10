@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Link, Route } from "react-router-dom";
 import Loader from "./Loader";
 import Login from "./Login";
-import { Container, Col, Row, Button } from "react-bootstrap";
+import { Alert, Container, Col, Row, Button } from "react-bootstrap";
 import LoadedCardsDisplayer from "./LoadedCardsDisplayer";
 import Pagination from "./Pagination";
 import Search from "./Search";
@@ -16,6 +16,7 @@ const HomePage = (props) => {
   const [loadedCards, setLoadedCards] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [colors, setColors] = useState([]);
+  const [searchErrorMessage, setSearchErrorMessage] = useState("");
 
   useEffect(() => {
     cardService.getAll(loadCards);
@@ -29,6 +30,8 @@ const HomePage = (props) => {
   const handleLogout = () => {
     authService.logOut().then((r) => setUser());
   };
+
+  const handleSearchOutput = (message) => setSearchErrorMessage(message);
 
   return (
     <div>
@@ -46,13 +49,22 @@ const HomePage = (props) => {
                       setLoadedCards={setLoadedCards}
                       setIsLoading={setIsLoading}
                       colors={colors}
+                      onChange={handleSearchOutput.bind(this)}
                     />
                     <div className="pt-4 text-center text-lg-left">
                       <ColorProvider>
                         <Filter setHomeColors={setColors} isDisabled={false} />
                       </ColorProvider>
                     </div>
-                    <p id="searchBarErrorMsg"></p>
+                    {0 < searchErrorMessage.length && (
+                      <Alert
+                        key="searchBarError"
+                        variant="danger"
+                        className="text-center text-lg-left"
+                      >
+                        {searchErrorMessage}
+                      </Alert>
+                    )}
                   </Col>
                   <Col xs={12} className="d-lg-none">
                     <hr />
