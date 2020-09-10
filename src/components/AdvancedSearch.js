@@ -37,6 +37,13 @@ const AdvancedSearch = (props) => {
   const [cardsToDisplay, setCardsToDisplay] = useState([]);
 
   useEffect(() => {
+    if (cards.length === 0 || currentPage !== undefined) {
+      setCurrentPage(undefined);
+      history.push("/search");
+    }
+  }, []);
+
+  useEffect(() => {
     if (cards.length === 0) {
       setIsLoading(true);
       const fetchData = async () => {
@@ -80,10 +87,6 @@ const AdvancedSearch = (props) => {
         await Promise.all(promises);
 
         setIsLoading(false);
-        if (cards.length === 0 && currentPage !== undefined) {
-          setCurrentPage(undefined);
-          history.push("/search");
-        }
       };
       fetchData();
     } else {
@@ -253,7 +256,7 @@ const AdvancedSearch = (props) => {
         </Form.Group>
         <Form.Row className="justify-content-center">
           <Button onClick={search} disabled={isLoading}>
-            <Link to={`search/${1}`}>Search</Link>
+            <Link to={`/search/${1}`}>Search</Link>
           </Button>
         </Form.Row>
       </Form>
