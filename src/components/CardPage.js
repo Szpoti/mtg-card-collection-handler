@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import LiveCardService from "../services/LiveCardService";
@@ -9,10 +9,15 @@ const CardPage = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [prints, setPrints] = useState([]);
   const [card, setCard] = useState(null);
+  const textDisplayer = useRef();
+  const mainPageRef = useRef();
 
   async function fetchSymbols() {
     symbols = await cardService.getSymbols();
-    document.getElementById("cardText").innerHTML = insertSvgs(card.text);
+    if (textDisplayer.current !== null) {
+      textDisplayer.current.innerHTML = insertSvgs(card.text);
+      setIsLoading(false);
+    }
   }
 
   const loadOtherPrints = async (mainCard) => {
@@ -22,13 +27,11 @@ const CardPage = (props) => {
 
   const loadCardIfNotCached = async () => {
     if (props.card !== undefined) {
-      console.log("in if");
       if (props.card.imageUri === null) {
         props.card.imageUri = "/img/missing-card-image.jpg";
       }
       setCard(props.card);
     } else {
-      console.log("in else");
       const cardId = props.match.params.id;
       const apiCard = await cardService.getCardBy(cardId);
 
@@ -36,7 +39,6 @@ const CardPage = (props) => {
         apiCard.imageUri = "/img/missing-card-image.jpg";
       }
       setCard(apiCard);
-      setIsLoading(false);
     }
   };
 
@@ -77,15 +79,14 @@ const CardPage = (props) => {
           newText = newText.replace(alt, tag);
         }
       });
-
-      setIsLoading(false);
-      document.getElementById("mainPage").style = { mainPageShow };
-
+      if (mainPageRef.current !== null) {
+        mainPageRef.current.style = { mainPageShow };
+      }
       return newText;
     } else {
-      setIsLoading(false);
-      document.getElementById("mainPage").style = { mainPageShow };
-
+      if (mainPageRef.current !== null) {
+        mainPageRef.current.style = { mainPageShow };
+      }
       return "Text not found";
     }
   };
@@ -94,7 +95,7 @@ const CardPage = (props) => {
     return (
       <Container>
         <Loader isLoading={isLoading}></Loader>
-        <div id="mainPage" style={mainPage}>
+        <div id="mainPage" style={mainPage} ref={mainPageRef}>
           <div style={content}>
             <img
               src={card.imageUri}
@@ -124,9 +125,12 @@ const CardPage = (props) => {
                 {card.price}
               </span>
               <br />
-              <div id="cardText" className="textStyle" style={textStyle}>
-                {card.text}
-              </div>
+              <div
+                ref={textDisplayer}
+                id="cardText"
+                className="textStyle"
+                style={textStyle}
+              ></div>
             </div>
           </div>
           <table style={tableStyle}>
@@ -161,12 +165,13 @@ const CardPage = (props) => {
 
   if (card === null) {
     return (
-      <Container>
-        <Loader isLoading={isLoading}></Loader>
-      </Container>
+      <div id="mainPage" style={mainPage}>
+        <Container>
+          <Loader isLoading={isLoading}></Loader>
+        </Container>
+      </div>
     );
   } else if (props.match.params.id !== card.id) {
-    setIsLoading(true);
     loadNewCard();
   } else {
     return returnDetails();

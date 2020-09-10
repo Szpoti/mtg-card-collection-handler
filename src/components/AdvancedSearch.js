@@ -1,61 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { Button, Container, Form, Col, Row } from "react-bootstrap";
+import { Link, useHistory } from "react-router-dom";
 import { ColorProvider } from "./ColorProvider";
 import Filter from "./Filter";
 import CustomMultiSelect from "./CustomMultiSelect";
 import Loader from "./Loader";
 import LoadedCardsDisplayer from "./LoadedCardsDisplayer";
+import Pagination, { getPaginationCards } from "./Pagination";
+import Storage from "../services/DataStorageService";
 
 const AdvancedSearch = (props) => {
   const cardService = props.cardService;
 
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    setIsLoading(true);
-    const fetchData = async () => {
-      const stringArrayToMultiSelect = (array) => {
-        return array.map((item, index) => {
-          return { label: item, value: index };
-        });
-      };
-
-      const catalog = cardService.getCatalog();
-      const promises = [
-        catalog
-          .forArtifacts()
-          .then((artifacts) =>
-            setAllArtifacts(stringArrayToMultiSelect(artifacts))
-          ),
-        catalog
-          .forEnchantments()
-          .then((enchantments) =>
-            setAllEnchantments(stringArrayToMultiSelect(enchantments))
-          ),
-        catalog
-          .forLands()
-          .then((lands) => setAllLands(stringArrayToMultiSelect(lands))),
-        catalog
-          .forPlaneswalkers()
-          .then((planeswalkers) =>
-            setAllPlaneswalkers(stringArrayToMultiSelect(planeswalkers))
-          ),
-        catalog
-          .forCreatures()
-          .then((creatures) =>
-            setAllCreatures(stringArrayToMultiSelect(creatures))
-          ),
-        catalog
-          .forArtistNames()
-          .then((artists) => setAllArtists(stringArrayToMultiSelect(artists))),
-      ];
-      await Promise.all(promises);
-
-      setIsLoading(false);
-    };
-
-    fetchData();
-  }, [cardService]);
+  const history = useHistory();
 
   const [colors, setColors] = useState([]);
   const [allArtifacts, setAllArtifacts] = useState([]);
@@ -74,17 +33,109 @@ const AdvancedSearch = (props) => {
   const [minimumPrice, setMinimumPrice] = useState(0);
   const [maximumPrice, setMaximumPrice] = useState(Number.MAX_VALUE);
   const [selectedArtists, setSelectedArtists] = useState([]);
+  const [currentPage, setCurrentPage] = useState(props.match.params.page);
   const [cards, setCards] = useState([]);
+  const [cardsToDisplay, setCardsToDisplay] = useState([]);
+
+  const stringArrayToMultiSelect = (array) => {
+    return array.map((item, index) => {
+      return { label: item, value: index };
+    });
+  };
+
+  var dataToSave = {
+    allCards: cards,
+    saveAllCards: Storage.saveAllCards,
+    cardsToDisplay: cardsToDisplay,
+    saveCardsToDisplay: Storage.saveDisplayableCards,
+    currentPage: currentPage,
+    saveCurrentPage: Storage.saveCurrentPage,
+  };
+
+  useEffect(() => {
+    var storedCards = Storage.getDisplayableCards();
+    if (storedCards.length > 0) {
+      var allCards = Storage.getAllCards();
+      var currPage = Storage.getCurrentPage();
+      setCardsToDisplay(storedCards);
+      setCards(allCards);
+      setCurrentPage(currPage);
+    } else if (cards.length === 0 || currentPage !== undefined) {
+      setCurrentPage(undefined);
+      history.push("/search");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (cards.length === 0) {
+      setIsLoading(true);
+      if (Storage.getArtists().length === 0) {
+        const fetchData = async () => {
+          const catalog = cardService.getCatalog();
+          const promises = [
+            catalog.forArtifacts().then((artifacts) => {
+              setAllArtifacts(stringArrayToMultiSelect(artifacts));
+              Storage.saveArtifactTypes(artifacts);
+            }),
+            catalog.forEnchantments().then((enchantments) => {
+              setAllEnchantments(stringArrayToMultiSelect(enchantments));
+              Storage.saveEnchantmentTypes(enchantments);
+            }),
+            catalog.forLands().then((lands) => {
+              setAllLands(stringArrayToMultiSelect(lands));
+              Storage.saveLandTypes(lands);
+            }),
+            catalog.forPlaneswalkers().then((planeswalkers) => {
+              setAllPlaneswalkers(stringArrayToMultiSelect(planeswalkers));
+              Storage.savePlaneswalkerTypes(planeswalkers);
+            }),
+            catalog.forCreatures().then((creatures) => {
+              setAllCreatures(stringArrayToMultiSelect(creatures));
+              Storage.saveCreatureTypes(creatures);
+            }),
+            catalog.forArtistNames().then((artists) => {
+              setAllArtists(stringArrayToMultiSelect(artists));
+              Storage.saveArtists(artists);
+            }),
+          ];
+          await Promise.all(promises);
+
+          setIsLoading(false);
+        };
+        fetchData();
+      } else {
+        setAllArtifacts(stringArrayToMultiSelect(Storage.getArtifactTypes()));
+
+        setAllEnchantments(
+          stringArrayToMultiSelect(Storage.getEnchantmentTypes())
+        );
+
+        setAllLands(stringArrayToMultiSelect(Storage.getLandTypes()));
+
+        setAllPlaneswalkers(
+          stringArrayToMultiSelect(Storage.getPlaneswalkerTypes())
+        );
+
+        setAllCreatures(stringArrayToMultiSelect(Storage.getCreatureTypes()));
+
+        setAllArtists(stringArrayToMultiSelect(Storage.getArtists()));
+        setIsLoading(false);
+      }
+    } else {
+      setCardsToDisplay(getPaginationCards(currentPage, cards));
+    }
+  }, [currentPage]);
 
   const cleanFromMultiselect = (array) => {
     let r = [];
-    array.forEach(element => r.push(element.label));
+    array.forEach((element) => r.push(element.label));
     return r;
-  }
+  };
 
   const search = async () => {
     setIsLoading(true);
     setCards([]);
+    setCardsToDisplay([]);
     const type = {
       artifacts: cleanFromMultiselect(selectedArtifacts),
       enchantments: cleanFromMultiselect(selectedEnchantments),
@@ -96,9 +147,25 @@ const AdvancedSearch = (props) => {
       min: minimumPrice,
       max: maximumPrice,
     };
-    const foundCards = await cardService.advancedSearch(name, colors, type, price, selectedArtists);
-    setCards(foundCards);
-    setIsLoading(false);
+    const foundCards = await cardService.advancedSearch(
+      name,
+      colors,
+      type,
+      price,
+      selectedArtists
+    );
+    if (foundCards.length > 0) {
+      setCards(foundCards);
+      setIsLoading(false);
+      const displayCards = getPaginationCards(1, foundCards);
+      setCardsToDisplay(displayCards);
+      setCurrentPage(1);
+    } else {
+      setCards([]);
+      setIsLoading(false);
+      setCardsToDisplay(null);
+      setCurrentPage(1);
+    }
   };
 
   return (
@@ -112,7 +179,7 @@ const AdvancedSearch = (props) => {
             <Col xs={12} md={9}>
               <Form.Control
                 type="text"
-                onChange={e => setName(e.target.value)}
+                onChange={(e) => setName(e.target.value)}
                 disabled={isLoading}
                 placeholder='Any words in the name, e.g. "Fire"'
               />
@@ -196,17 +263,17 @@ const AdvancedSearch = (props) => {
               <Form.Row className="m-0">
                 <Form.Control
                   type="text"
-                  onChange={e => setMinimumPrice(e.target.value)}
+                  onChange={(e) => setMinimumPrice(e.target.value)}
                   disabled={isLoading}
                   className="col-3 mr-3"
-                  placeholder='Minimum'
+                  placeholder="Minimum"
                 />
                 <Form.Control
                   type="text"
-                  onChange={e => setMaximumPrice(e.target.value)}
+                  onChange={(e) => setMaximumPrice(e.target.value)}
                   disabled={isLoading}
                   className="col-3"
-                  placeholder='Maximum'
+                  placeholder="Maximum"
                 />
               </Form.Row>
             </Col>
@@ -230,15 +297,30 @@ const AdvancedSearch = (props) => {
         </Form.Group>
         <Form.Row className="justify-content-center">
           <Button onClick={search} disabled={isLoading}>
-            Search
+            <Link to={`/search/${1}`}>Search</Link>
           </Button>
         </Form.Row>
       </Form>
-      <Container className="mt-5">
-        <Loader isLoading={isLoading} />
-      </Container>
       <Container>
-        <LoadedCardsDisplayer loadedCards={cards} />
+        <Pagination
+          cards={cards}
+          setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+          setCardsToDisplay={setCardsToDisplay}
+        />
+        <Container className="mt-5">
+          <Loader isLoading={isLoading} />
+        </Container>
+        <LoadedCardsDisplayer
+          loadedCards={cardsToDisplay}
+          dataToSave={dataToSave}
+        />
+        <Pagination
+          cards={cards}
+          setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+          setCardsToDisplay={setCardsToDisplay}
+        />
       </Container>
     </Container>
   );

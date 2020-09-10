@@ -8,7 +8,6 @@ import Pagination from "./Pagination";
 import Search from "./Search";
 import Filter from "./Filter";
 import { ColorProvider } from "./ColorProvider";
-import DetailedCard from "./DetailedCard";
 
 const HomePage = (props) => {
   const [user, setUser] = useState();
@@ -28,8 +27,7 @@ const HomePage = (props) => {
   };
 
   const handleLogout = () => {
-    authService.logOut()
-    .then(r => setUser());
+    authService.logOut().then((r) => setUser());
   };
 
   const LoginBar = (props) => {
@@ -87,9 +85,7 @@ const HomePage = (props) => {
                 <Container className="p-3">
                   <LoginBar />
                   <Row className="pt-3">
-                    <Col xs={12} md={6} className="order-1 order-md-0">
-                      <Pagination />
-                    </Col>
+                    <Col xs={12} md={6} className="order-1 order-md-0"></Col>
                     <Col
                       xs={12}
                       md={6}
@@ -116,13 +112,6 @@ const HomePage = (props) => {
                 <Loader isLoading={isLoading} />
                 <Container>
                   <LoadedCardsDisplayer loadedCards={loadedCards} />
-                </Container>
-                <Container className="p-3">
-                  <Row>
-                    <Col>
-                      <Pagination />
-                    </Col>
-                  </Row>
                 </Container>
               </Container>
             </ColorProvider>
