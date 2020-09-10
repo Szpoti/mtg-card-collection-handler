@@ -85,9 +85,7 @@ const HomePage = (props) => {
                 <Container className="p-3">
                   <LoginBar />
                   <Row className="pt-3">
-                    <Col xs={12} md={6} className="order-1 order-md-0">
-                      <Pagination />
-                    </Col>
+                    <Col xs={12} md={6} className="order-1 order-md-0"></Col>
                     <Col
                       xs={12}
                       md={6}
@@ -114,13 +112,6 @@ const HomePage = (props) => {
                 <Loader isLoading={isLoading} />
                 <Container>
                   <LoadedCardsDisplayer loadedCards={loadedCards} />
-                </Container>
-                <Container className="p-3">
-                  <Row>
-                    <Col>
-                      <Pagination />
-                    </Col>
-                  </Row>
                 </Container>
               </Container>
             </ColorProvider>

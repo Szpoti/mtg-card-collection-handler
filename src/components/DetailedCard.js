@@ -15,7 +15,7 @@ const DetailedCard = (props) => {
               alt="untap"
               style={{ width: "2%", height: "auto" }}
             ></img>
-            Back to main page
+            Go back
           </h3>
         </Link>
       </Container>
