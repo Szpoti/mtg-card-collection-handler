@@ -1,86 +1,56 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
+const itemPerPage = 32;
+
 export default function Pagination(props) {
-  if (props.currentPage === undefined || props.cards.length < 33) {
+  if (props.currentPage === undefined || props.cards.length <= itemPerPage) {
     return null;
   }
 
-  const ALLPAGES = props.cards.length / 32;
+  const totalPage = Math.ceil(props.cards.length / itemPerPage);
 
-  const changeCurrentPage = (val) => {
-    props.setCurrentPage(val);
-  };
+  const buttonTemplate = (cssClassName, pageNumber, text, ariaLabel) => {
+    if (pageNumber <= 0 || totalPage < pageNumber) {
+      cssClassName += " disabled";
+    }
+    return <li className={cssClassName}>
+      <Link
+        to={`/search/${pageNumber}`}
+        className="page-link"
+        onClick={() => props.setCurrentPage(pageNumber)}
+        aria-label={ariaLabel}
+        >
+        {text}
+      </Link>
+    </li>;
+  }
 
   const Pages = () => {
     const buttons = [];
-    for (let i = 0; i <= ALLPAGES; i++) {
-      if (i + 1 === props.currentPage) {
-        buttons.push(
-          <li className="page-item active">
-            <Link
-              to={`/search/${i + 1}`}
-              className="page-link"
-              onClick={() => changeCurrentPage(i + 1)}
-              //onClick={props.setCurrentPage(i + 1)}
-            >
-              {i + 1}
-            </Link>
-          </li>
-        );
-      } else {
-        buttons.push(
-          <li className="page-item">
-            <Link
-              to={`/search/${i + 1}`}
-              className="page-link"
-              onClick={() => changeCurrentPage(i + 1)}
-            >
-              {i + 1}
-            </Link>
-          </li>
-        );
+    for (let i = 1; i <= totalPage; i++) {
+      let cssClassName = "page-item";
+      if (i === props.currentPage) {
+        cssClassName += " active";
       }
+      buttons.push(buttonTemplate(cssClassName, i, i, `Page ${i}`));
     }
-
     return buttons;
   };
 
   return (
     <nav className="d-flex justify-content-center">
       <ul className="pagination">
-        <li className="page-item disabled">
-          <Link
-            to={`/search/${props.currentPage - 1}`}
-            onClick={() => changeCurrentPage(props.currentPage - 1)}
-            className="page-link"
-            aria-label="Previous"
-          >
-            <span aria-hidden="true">&laquo;</span>
-          </Link>
-        </li>
+        {buttonTemplate("page-item", props.currentPage - 1, <span aria-hidden="true">&laquo;</span>, "Previous page")}
         <Pages />
-        <li className="page-item">
-          <Link
-            to={`/search/${props.currentPage + 1}`}
-            onClick={() => changeCurrentPage(props.currentPage + 1)}
-            className="page-link"
-            aria-label="Next"
-          >
-            <span aria-hidden="true">&raquo;</span>
-          </Link>
-        </li>
+        {buttonTemplate("page-item", props.currentPage + 1, <span aria-hidden="true">&raquo;</span>, "Next page")}
       </ul>
     </nav>
   );
 }
 
-const getCardsToDisplay = (currentPage, cards) => {
-  let startIndex = (currentPage - 1) * 32;
-  let endIndex = startIndex + 32;
-  return cards.slice(startIndex, endIndex);
-};
-
 export const getPaginationCards = (currentPage, cards) => {
-  return getCardsToDisplay(currentPage, cards);
-};
+  const startIndex = (currentPage - 1) * itemPerPage;
+  const endIndex = startIndex + itemPerPage;
+  return cards.slice(startIndex, endIndex);
+}
