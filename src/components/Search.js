@@ -48,7 +48,7 @@ const Search = (props) => {
   };
 
   return (
-    <div className="input-group input-focus justify-content-center justify-content-md-end">
+    <div className="input-group input-focus justify-content-center justify-content-lg-start">
       <input
         id="searchBar"
         type="search"

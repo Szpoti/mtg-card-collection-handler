@@ -30,49 +30,6 @@ const HomePage = (props) => {
     authService.logOut().then((r) => setUser());
   };
 
-  const LoginBar = (props) => {
-    let block;
-    if (user === undefined) {
-      block = (
-        <div>
-          <Login authService={authService} setHomeUser={setUser} />
-          <Row>
-            <Col>
-              <p className="text-md-center text-lg-right">
-                Doesn't have an account yet?
-                <Link to={`/registration`} className="ml-1">
-                  Click to register.
-                </Link>
-              </p>
-            </Col>
-          </Row>
-        </div>
-      );
-    } else {
-      block = (
-        <div>
-          <Row>
-            <Col>
-              <p style={{ float: "right" }}>
-                Logged in as <strong>{user.username}</strong>
-              </p>
-            </Col>
-            <Col>
-              <Button
-                variant="primary"
-                className="mb-2 mr-sm-2"
-                onClick={handleLogout}
-              >
-                Log out
-              </Button>
-            </Col>
-          </Row>
-        </div>
-      );
-    }
-    return block;
-  };
-
   return (
     <div>
       <Route
@@ -82,33 +39,45 @@ const HomePage = (props) => {
           <React.Fragment>
             <ColorProvider>
               <Container>
-                <Container className="p-3">
-                  <LoginBar />
-                  <Row className="pt-3">
-                    <Col xs={12} md={6} className="order-1 order-md-0"></Col>
-                    <Col
-                      xs={12}
-                      md={6}
-                      className="order-0 order-md-1 py-3 py-md-0"
-                    >
-                      <Search
-                        cardService={cardService}
-                        setLoadedCards={setLoadedCards}
-                        setIsLoading={setIsLoading}
-                        colors={colors}
-                      />
-                      <div className="text-center text-md-right mt-3">
-                        <ColorProvider>
-                          <Filter
-                            setHomeColors={setColors}
-                            isDisabled={false}
-                          />
-                        </ColorProvider>
-                      </div>
-                      <p id="searchBarErrorMsg"></p>
+                <Row>
+                  <Col xs={12} lg={6}>
+                    <Search
+                      cardService={cardService}
+                      setLoadedCards={setLoadedCards}
+                      setIsLoading={setIsLoading}
+                      colors={colors}
+                    />
+                    <div className="pt-4 text-center text-lg-left">
+                      <ColorProvider>
+                        <Filter setHomeColors={setColors} isDisabled={false} />
+                      </ColorProvider>
+                    </div>
+                    <p id="searchBarErrorMsg"></p>
+                  </Col>
+                  <Col xs={12} className="d-lg-none">
+                    <hr />
+                  </Col>
+                  {user === undefined ? (
+                    <Col xs={12} lg={6}>
+                      <Login authService={authService} setHomeUser={setUser} />
+                      <p className="text-center text-lg-right">
+                        Doesn't have an account yet?
+                        <Link to={`/registration`} className="ml-1">
+                          Click to register.
+                        </Link>
+                      </p>
                     </Col>
-                  </Row>
-                </Container>
+                  ) : (
+                    <Col xs={12} lg={6} className="text-center text-lg-right">
+                      <p>
+                        Logged in as <strong>{user.username}</strong>
+                      </p>
+                      <Button variant="primary" onClick={handleLogout}>
+                        Log out
+                      </Button>
+                    </Col>
+                  )}
+                </Row>
                 <Loader isLoading={isLoading} />
                 <Container>
                   <LoadedCardsDisplayer loadedCards={loadedCards} />

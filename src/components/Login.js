@@ -43,7 +43,7 @@ const Login = (props) => {
     <div>
       <Row>
         <Col>
-          <Form inline className="float-right">
+          <Form inline className="justify-content-end">
             <Form.Label htmlFor="loginEmail" srOnly>
               Email address
             </Form.Label>
