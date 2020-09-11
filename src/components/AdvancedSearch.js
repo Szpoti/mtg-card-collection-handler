@@ -296,10 +296,15 @@ const AdvancedSearch = (props) => {
           </Form.Row>
         </Form.Group>
         <Form.Row className="justify-content-center">
-          <Button onClick={search} disabled={isLoading}>
-            <Link to={`/search/${1}`}>Search</Link>
+          <Button onClick={search} disabled={isLoading} className="d-block">
+            <Link to={`/search/${1}`} className="text-light">
+              Search
+            </Link>
           </Button>
         </Form.Row>
+        <p className="text-center mt-3">
+          or <Link to={"/"}>back to the home page</Link>.
+        </p>
       </Form>
       <Container>
         <Pagination
