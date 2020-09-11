@@ -55,16 +55,17 @@ const HomePage = (props) => {
                       <ColorProvider>
                         <Filter setHomeColors={setColors} isDisabled={false} />
                       </ColorProvider>
+                      {0 < searchErrorMessage.length && (
+                        <Alert
+                          key="searchBarError"
+                          variant="danger"
+                          className="text-center text-lg-left"
+                        >
+                          {searchErrorMessage}
+                        </Alert>
+                      )}
+                      or <Link to={"/search"}>use the advanced search</Link>.
                     </div>
-                    {0 < searchErrorMessage.length && (
-                      <Alert
-                        key="searchBarError"
-                        variant="danger"
-                        className="text-center text-lg-left"
-                      >
-                        {searchErrorMessage}
-                      </Alert>
-                    )}
                   </Col>
                   <Col xs={12} className="d-lg-none">
                     <hr />
