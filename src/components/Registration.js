@@ -1,5 +1,5 @@
 import React from "react";
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from "react-router-dom";
 import {
   Container,
   Col,
@@ -21,7 +21,7 @@ const Registration = (props) => {
       document.querySelector("#email").value,
       document.querySelector("#password").value
     );
-    history.push('/');
+    history.push("/");
   };
 
   return (
@@ -29,7 +29,6 @@ const Registration = (props) => {
       <Row className="justify-content-center">
         <Col className="col-lg-4 text-center">
           <p className="h2">Registration</p>
-
           <Form>
             <Form.Label htmlFor="username" srOnly>
               Username
@@ -68,6 +67,7 @@ const Registration = (props) => {
               Registration
             </Button>
           </Form>
+          or <Link to={"/"}>Login</Link>.
         </Col>
       </Row>
     </Container>
