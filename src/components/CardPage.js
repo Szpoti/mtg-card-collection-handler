@@ -15,7 +15,15 @@ const CardPage = (props) => {
   async function fetchSymbols() {
     symbols = await cardService.getSymbols();
     if (textDisplayer.current !== null) {
-      textDisplayer.current.innerHTML = insertSvgs(card.text);
+      if (card.layout === "split") {
+        console.log(card.cardFaces);
+        const firstText = insertSvgs(card.cardFaces[0]);
+        const secondText = insertSvgs(card.cardFaces[1]);
+        const text = firstText + " // " + secondText;
+        textDisplayer.current.innerHTML = text;
+      } else if (card.layout === "normal") {
+        textDisplayer.current.innerHTML = insertSvgs(card.text);
+      }
       setIsLoading(false);
     }
   }
@@ -34,6 +42,7 @@ const CardPage = (props) => {
     } else {
       const cardId = props.match.params.id;
       const apiCard = await cardService.getCardBy(cardId);
+      console.log(apiCard);
 
       if (apiCard.imageUri === null) {
         apiCard.imageUri = "/img/missing-card-image.jpg";
@@ -144,7 +153,7 @@ const CardPage = (props) => {
               {prints.map((cardPrint) => (
                 <tr>
                   <td>
-                    <Link to={`/card/${cardPrint.name}/${cardPrint.id}`}>
+                    <Link to={`/card/${cardPrint.id}`}>
                       {cardPrint.setName}
                     </Link>
                   </td>

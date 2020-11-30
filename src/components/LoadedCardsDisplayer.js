@@ -18,7 +18,7 @@ const LoadedCardsDisplayer = (props) => {
       <Row className="d-flex flex-wrap">
         {props.loadedCards.map((card) => (
           <Col key={card.id} xs={4} md={3} className="p-3">
-            <Link to={`/card/${card.name}/${card.id}`} onClick={saveData}>
+            <Link to={`/card/${card.id}`} onClick={saveData}>
               <img
                 src={
                   card.imageUri === null

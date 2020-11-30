@@ -25,11 +25,7 @@ const App = (props) => {
             <HomePage cardService={cardService} authService={authService} />
           )}
         ></Route>
-        <Route
-          key="card"
-          path="/card/:name/:id"
-          component={DetailedCard}
-        ></Route>
+        <Route key="card" path="/card/:id" component={DetailedCard}></Route>
         <Route
           key="registration"
           path="/registration"
