@@ -15,7 +15,13 @@ const CardPage = (props) => {
   async function fetchSymbols() {
     symbols = await cardService.getSymbols();
     if (textDisplayer.current !== null) {
-      if (card.layout === "split") {
+      if (card.layout === "transform") {
+        console.log(card.cardFaces);
+        const firstText = insertSvgs(card.cardFaces[0]);
+        const secondText = insertSvgs(card.cardFaces[1]);
+        const text = firstText + " // " + secondText;
+        textDisplayer.current.innerHTML = text;
+      } else if (card.layout === "split") {
         console.log(card.cardFaces);
         const firstText = insertSvgs(card.cardFaces[0]);
         const secondText = insertSvgs(card.cardFaces[1]);
