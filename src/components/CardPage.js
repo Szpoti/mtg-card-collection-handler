@@ -16,12 +16,17 @@ const CardPage = (props) => {
   async function fetchSymbols() {
     symbols = await cardService.getSymbols();
     if (textDisplayer.current !== null) {
-      if (card.layout === "split" || card.layout === "transform") {
+      if (
+        card.layout === "split" ||
+        card.layout === "transform" ||
+        card.layout === "modal_dfc"
+      ) {
         console.log(card.cardFaces);
         textDisplayer.current.innerHTML = textDisplayForSpecialCards();
       } else if (card.layout === "normal") {
         textDisplayer.current.innerHTML = insertSvgs(card.text);
       }
+      mainPageRef.current.style = mainPageShow;
       setIsLoading(false);
     }
   }
@@ -58,12 +63,6 @@ const CardPage = (props) => {
         </div>
       );
     }
-  };
-
-  const textDisplayForSpecialCards = () => {
-    const firstText = insertSvgs(card.cardFaces[0]);
-    const secondText = insertSvgs(card.cardFaces[1]);
-    return firstText + " // " + secondText;
   };
 
   const loadOtherPrints = async (mainCard) => {
@@ -105,6 +104,12 @@ const CardPage = (props) => {
     return s.charAt(0).toUpperCase() + s.slice(1);
   };
 
+  const textDisplayForSpecialCards = () => {
+    const firstText = insertSvgs(card.cardFaces[0]);
+    const secondText = insertSvgs(card.cardFaces[1]);
+    return firstText + " // " + secondText;
+  };
+
   const insertSvgs = (fullText) => {
     if (fullText !== undefined) {
       let newText = fullText;
@@ -124,19 +129,14 @@ const CardPage = (props) => {
           newText = newText.replace(alt, tag);
         }
       });
-      if (mainPageRef.current !== null) {
-        mainPageRef.current.style = { mainPageShow };
-      }
       return newText;
     } else {
-      if (mainPageRef.current !== null) {
-        mainPageRef.current.style = { mainPageShow };
-      }
       return "Text not found";
     }
   };
 
   const returnDetails = () => {
+    console.log("card:" + card);
     return (
       <Container>
         <Loader isLoading={isLoading}></Loader>
@@ -205,6 +205,7 @@ const CardPage = (props) => {
   };
 
   if (card === null) {
+    console.log("Loading...");
     return (
       <div id="mainPage" style={mainPage}>
         <Container>
@@ -213,8 +214,10 @@ const CardPage = (props) => {
       </div>
     );
   } else if (props.match.params.id !== card.id) {
+    console.log("Loading new card");
     loadNewCard();
   } else {
+    console.log("Returning details");
     return returnDetails();
   }
 };
