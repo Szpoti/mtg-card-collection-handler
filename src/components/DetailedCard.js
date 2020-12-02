@@ -9,7 +9,7 @@ const DetailedCard = (props) => {
   return (
     <div>
       <Container className="mt-3">
-        <Link onClick={history.goBack}>
+        <Link onClick={history.goBack} to={""}>
           <h3>
             <img
               src="https://c2.scryfall.com/file/scryfall-symbols/card-symbols/Q.svg"
