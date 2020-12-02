@@ -11,28 +11,60 @@ const CardPage = (props) => {
   const [card, setCard] = useState(null);
   const textDisplayer = useRef();
   const mainPageRef = useRef();
+  let symbols = [];
 
   async function fetchSymbols() {
     symbols = await cardService.getSymbols();
     if (textDisplayer.current !== null) {
-      if (card.layout === "transform") {
+      if (card.layout === "split" || card.layout === "transform") {
         console.log(card.cardFaces);
-        const firstText = insertSvgs(card.cardFaces[0]);
-        const secondText = insertSvgs(card.cardFaces[1]);
-        const text = firstText + " // " + secondText;
-        textDisplayer.current.innerHTML = text;
-      } else if (card.layout === "split") {
-        console.log(card.cardFaces);
-        const firstText = insertSvgs(card.cardFaces[0]);
-        const secondText = insertSvgs(card.cardFaces[1]);
-        const text = firstText + " // " + secondText;
-        textDisplayer.current.innerHTML = text;
+        textDisplayer.current.innerHTML = textDisplayForSpecialCards();
       } else if (card.layout === "normal") {
         textDisplayer.current.innerHTML = insertSvgs(card.text);
       }
       setIsLoading(false);
     }
   }
+
+  const setImage = () => {
+    if (card.layout === "transform" || card.layout === "modal_dfc") {
+      return (
+        <div className="scene">
+          <div className="imageCard">
+            <img
+              id="cardFront"
+              className="cardImage cardImageFront"
+              src={card.cardImages[0]}
+              alt={card.name}
+            ></img>
+            <img
+              id="cardBack"
+              className="cardImage cardImageBack"
+              src={card.cardImages[1]}
+              alt={card.name}
+            ></img>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div class="imageCard">
+          <img
+            id="cardFront"
+            className="cardImage cardImageFront"
+            src={card.imageUri}
+            alt={card.name}
+          ></img>
+        </div>
+      );
+    }
+  };
+
+  const textDisplayForSpecialCards = () => {
+    const firstText = insertSvgs(card.cardFaces[0]);
+    const secondText = insertSvgs(card.cardFaces[1]);
+    return firstText + " // " + secondText;
+  };
 
   const loadOtherPrints = async (mainCard) => {
     const newPrints = await cardService.getOtherPrints(mainCard.oracleId);
@@ -56,8 +88,6 @@ const CardPage = (props) => {
       setCard(apiCard);
     }
   };
-
-  let symbols = [];
 
   useEffect(() => {
     loadCardIfNotCached();
@@ -112,11 +142,7 @@ const CardPage = (props) => {
         <Loader isLoading={isLoading}></Loader>
         <div id="mainPage" style={mainPage} ref={mainPageRef}>
           <div style={content}>
-            <img
-              src={card.imageUri}
-              alt={card.name}
-              style={cardImageStyle}
-            ></img>
+            {setImage()}
             <div style={detailsStyle}>
               <span>
                 <strong>Name:</strong> {card.name}
@@ -221,15 +247,6 @@ const detailsStyle = {
   display: "block",
   margin: "2px 0 0 0",
   fontSize: "200%",
-};
-
-const cardImageStyle = {
-  width: "30%",
-  heigth: "auto",
-  border: "solid black 3px",
-  borderRadius: "1%",
-  marginRight: "15px",
-  float: "left",
 };
 
 export default CardPage;
