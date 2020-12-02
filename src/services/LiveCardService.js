@@ -58,9 +58,11 @@ export default class LiveCardService {
   }
 
   async getAll(callback) {
-    await axios.get("https://localhost:5001/api/Cards").then((cards) => {
-      callback(cards.data);
-    });
+    await axios
+      .get("https://localhost:5001/api/Card/homepage")
+      .then((cards) => {
+        callback(cards.data);
+      });
   }
 
   getCatalog() {
