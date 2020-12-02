@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Container } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import LiveCardService from "../services/LiveCardService";
 import Loader from "./Loader";
+import Badge from "react-bootstrap/Badge";
 
 const CardPage = (props) => {
   const cardService = new LiveCardService();
@@ -12,6 +13,8 @@ const CardPage = (props) => {
   const textDisplayer = useRef();
   const mainPageRef = useRef();
   let symbols = [];
+  let legalities = [];
+  let isCardLegalIn = [];
 
   async function fetchSymbols() {
     symbols = await cardService.getSymbols();
@@ -135,8 +138,22 @@ const CardPage = (props) => {
     }
   };
 
+  const displayLegalities = () => {
+    for (let key in card.legalities) {
+      if (card.legalities.hasOwnProperty(key)) {
+        console.log(key, card.legalities[key]);
+      }
+    }
+  };
+
   const returnDetails = () => {
     console.log("card:" + card);
+    for (let key in card.legalities) {
+      if (card.legalities.hasOwnProperty(key)) {
+        legalities.push(key);
+        isCardLegalIn.push(card.legalities[key]);
+      }
+    }
     return (
       <Container>
         <Loader isLoading={isLoading}></Loader>
@@ -174,6 +191,43 @@ const CardPage = (props) => {
               ></div>
             </div>
           </div>
+
+          <Row>
+            {legalities.map((l, i) => {
+              if (isCardLegalIn[i] === "legal") {
+                return (
+                  <Col
+                    style={{
+                      border: "1px solid #0d5a00",
+                      backgroundColor: "#acf6b0",
+                    }}
+                    xs={3}
+                  >
+                    <strong>{capitalize(l)}</strong> :{" "}
+                    <Badge variant="success">
+                      {capitalize(isCardLegalIn[i])}
+                    </Badge>
+                  </Col>
+                );
+              } else {
+                return (
+                  <Col
+                    style={{
+                      border: "1px solid #5a0000",
+                      backgroundColor: "#f6acac",
+                    }}
+                    xs={3}
+                  >
+                    <strong>{capitalize(l)}</strong> :{" "}
+                    <Badge variant="danger">
+                      {capitalize(isCardLegalIn[i])}
+                    </Badge>
+                  </Col>
+                );
+              }
+            })}
+          </Row>
+
           <table style={tableStyle}>
             <thead>
               <tr>
