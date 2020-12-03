@@ -146,6 +146,64 @@ const CardPage = (props) => {
     }
   };
 
+  const setLegalities = () => {
+    return legalities.map((l, i) => {
+      if (isCardLegalIn[i] === "legal") {
+        return (
+          <Col
+            style={{
+              border: "1px solid #0d5a00",
+              backgroundColor: "#acf6b0",
+            }}
+            xs={3}
+          >
+            <strong>{capitalize(l)}</strong> :{" "}
+            <Badge variant="success">{capitalize(isCardLegalIn[i])}</Badge>
+          </Col>
+        );
+      } else if (isCardLegalIn[i] === "restricted") {
+        return (
+          <Col
+            style={{
+              border: "1px solid #7d5f04",
+              backgroundColor: "#efc138c7",
+            }}
+            xs={3}
+          >
+            <strong>{capitalize(l)}</strong> :{" "}
+            <Badge variant="warning">{capitalize(isCardLegalIn[i])}</Badge>
+          </Col>
+        );
+      } else if (isCardLegalIn[i] === "not_legal") {
+        return (
+          <Col
+            style={{
+              border: "1px solid #666a6d",
+              backgroundColor: "#a7acb4d1",
+            }}
+            xs={3}
+          >
+            <strong>{capitalize(l)}</strong> :{" "}
+            <Badge variant="secondary">{capitalize(isCardLegalIn[i])}</Badge>
+          </Col>
+        );
+      } else {
+        return (
+          <Col
+            style={{
+              border: "1px solid #5a0000",
+              backgroundColor: "#f6acac",
+            }}
+            xs={3}
+          >
+            <strong>{capitalize(l)}</strong> :{" "}
+            <Badge variant="danger">{capitalize(isCardLegalIn[i])}</Badge>
+          </Col>
+        );
+      }
+    });
+  };
+
   const returnDetails = () => {
     console.log("card:" + card);
     for (let key in card.legalities) {
@@ -192,41 +250,7 @@ const CardPage = (props) => {
             </div>
           </div>
 
-          <Row>
-            {legalities.map((l, i) => {
-              if (isCardLegalIn[i] === "legal") {
-                return (
-                  <Col
-                    style={{
-                      border: "1px solid #0d5a00",
-                      backgroundColor: "#acf6b0",
-                    }}
-                    xs={3}
-                  >
-                    <strong>{capitalize(l)}</strong> :{" "}
-                    <Badge variant="success">
-                      {capitalize(isCardLegalIn[i])}
-                    </Badge>
-                  </Col>
-                );
-              } else {
-                return (
-                  <Col
-                    style={{
-                      border: "1px solid #5a0000",
-                      backgroundColor: "#f6acac",
-                    }}
-                    xs={3}
-                  >
-                    <strong>{capitalize(l)}</strong> :{" "}
-                    <Badge variant="danger">
-                      {capitalize(isCardLegalIn[i])}
-                    </Badge>
-                  </Col>
-                );
-              }
-            })}
-          </Row>
+          <Row>{setLegalities()}</Row>
 
           <table style={tableStyle}>
             <thead>
