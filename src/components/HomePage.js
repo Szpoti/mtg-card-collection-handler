@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Link, Route } from "react-router-dom";
+import { BrowserRouter as Link, Route } from "react-router-dom";
 import Loader from "./Loader";
 import Login from "./Login";
 import { Alert, Container, Col, Row, Button } from "react-bootstrap";
 import LoadedCardsDisplayer from "./LoadedCardsDisplayer";
-import Pagination from "./Pagination";
 import Search from "./Search";
 import Filter from "./Filter";
 import { ColorProvider } from "./ColorProvider";
+import Storage from "../services/DataStorageService";
 
 const HomePage = (props) => {
   const [user, setUser] = useState();
@@ -17,9 +17,18 @@ const HomePage = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [colors, setColors] = useState([]);
   const [searchErrorMessage, setSearchErrorMessage] = useState("");
-
+  var dataToSave = {
+    allCards: loadedCards,
+    saveAllCards: Storage.saveAllCards,
+  };
   useEffect(() => {
-    cardService.getAll(loadCards);
+    var storedCards = Storage.getAllCards();
+    if (storedCards.length > 0) {
+      var allCards = Storage.getAllCards();
+      loadCards(allCards);
+    } else {
+      cardService.getAll(loadCards);
+    }
   }, [cardService]);
 
   const loadCards = (cards) => {
@@ -93,7 +102,10 @@ const HomePage = (props) => {
                 </Row>
                 <Loader isLoading={isLoading} />
                 <Container>
-                  <LoadedCardsDisplayer loadedCards={loadedCards} />
+                  <LoadedCardsDisplayer
+                    loadedCards={loadedCards}
+                    fromHomePage={dataToSave}
+                  />
                 </Container>
               </Container>
             </ColorProvider>
