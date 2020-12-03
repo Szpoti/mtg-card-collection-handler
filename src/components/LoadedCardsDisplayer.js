@@ -5,10 +5,15 @@ import { Col, Row } from "react-bootstrap";
 const LoadedCardsDisplayer = (props) => {
   const saveData = () => {
     if (props.dataToSave !== undefined) {
+      console.log("Saving cards");
       const data = props.dataToSave;
       data.saveAllCards(data.allCards);
       data.saveCardsToDisplay(data.cardsToDisplay);
       data.saveCurrentPage(data.currentPage);
+    } else if (props.fromHomePage !== undefined) {
+      console.log("Saving cards");
+      const data = props.fromHomePage;
+      data.saveAllCards(data.allCards);
     }
   };
   if (props.loadedCards === null) {

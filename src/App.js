@@ -1,7 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./App.css";
-import OfflineCardService from "./services/OfflineCardService";
 import LiveCardService from "./services/LiveCardService";
 import DetailedCard from "./components/DetailedCard";
 import Header from "./components/Header";
