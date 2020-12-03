@@ -24,7 +24,6 @@ const CardPage = (props) => {
         card.layout === "transform" ||
         card.layout === "modal_dfc"
       ) {
-        console.log(card.cardFaces);
         textDisplayer.current.innerHTML = textDisplayForSpecialCards();
       } else if (card.layout === "normal") {
         textDisplayer.current.innerHTML = insertSvgs(card.text);
@@ -82,7 +81,6 @@ const CardPage = (props) => {
     } else {
       const cardId = props.match.params.id;
       const apiCard = await cardService.getCardBy(cardId);
-      console.log(apiCard);
 
       if (apiCard.imageUri === null) {
         apiCard.imageUri = "/img/missing-card-image.jpg";
@@ -197,7 +195,6 @@ const CardPage = (props) => {
   };
 
   const returnDetails = () => {
-    console.log("card:" + card);
     for (let key in card.legalities) {
       if (card.legalities.hasOwnProperty(key)) {
         legalities.push(key);
@@ -275,7 +272,6 @@ const CardPage = (props) => {
   };
 
   if (card === null) {
-    console.log("Loading...");
     return (
       <div id="mainPage" style={mainPage}>
         <Container>
@@ -284,10 +280,8 @@ const CardPage = (props) => {
       </div>
     );
   } else if (props.match.params.id !== card.id) {
-    console.log("Loading new card");
     loadNewCard();
   } else {
-    console.log("Returning details");
     return returnDetails();
   }
 };

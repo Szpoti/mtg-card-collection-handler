@@ -31,11 +31,9 @@ const Login = (props) => {
       document.querySelector("#loginPassword").value
     );
     if (user === "") {
-      console.log("Failed to log in");
       document.querySelector("#errorMsg").innerHTML =
         "Invalid username or password";
     } else {
-      console.log("Logged in successfuly as", user.username);
       props.setHomeUser(user);
     }
   };
