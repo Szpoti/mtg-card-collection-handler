@@ -138,14 +138,6 @@ const CardPage = (props) => {
     }
   };
 
-  const displayLegalities = () => {
-    for (let key in card.legalities) {
-      if (card.legalities.hasOwnProperty(key)) {
-        console.log(key, card.legalities[key]);
-      }
-    }
-  };
-
   const setLegalities = () => {
     return legalities.map((l, i) => {
       if (isCardLegalIn[i] === "legal") {

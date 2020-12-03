@@ -34,6 +34,7 @@ const HomePage = (props) => {
   }, [cardService]);
 
   const loadCards = (cards) => {
+    Storage.saveAllCards(cards);
     setLoadedCards(cards);
     setIsLoading(false);
   };
