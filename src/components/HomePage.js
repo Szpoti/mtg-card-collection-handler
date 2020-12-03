@@ -17,17 +17,19 @@ const HomePage = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [colors, setColors] = useState([]);
   const [searchErrorMessage, setSearchErrorMessage] = useState("");
+
   var dataToSave = {
     allCards: loadedCards,
     saveAllCards: Storage.saveAllCards,
   };
+
   useEffect(() => {
     var storedCards = Storage.getAllCards();
     if (storedCards.length > 0) {
       var allCards = Storage.getAllCards();
       loadCards(allCards);
     } else {
-      cardService.getAll(loadCards);
+      cardService.getRandom(loadCards);
     }
   }, [cardService]);
 
@@ -95,6 +97,28 @@ const HomePage = (props) => {
                   </Button>
                 </Col>
               )}
+            </Row>
+            <Row>
+              <Col xs={12}>
+                <Button
+                  variant="outline-info"
+                  disabled={isLoading}
+                  onClick={
+                    !isLoading
+                      ? () => {
+                          setIsLoading(true);
+                          cardService.getRandom(loadCards);
+                        }
+                      : null
+                  }
+                  block
+                >
+                  {isLoading
+                    ? "Loading…"
+                    : "Give me some random, fancy cards NOW!"}
+                </Button>
+                <br></br>
+              </Col>
             </Row>
             <Loader isLoading={isLoading} />
             <Container>

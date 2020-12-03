@@ -57,7 +57,7 @@ export default class LiveCardService {
       });
   }
 
-  async getAll(callback) {
+  async getRandom(callback) {
     await axios
       .get("https://localhost:5001/api/Card/homepage")
       .then((cards) => {
