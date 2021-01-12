@@ -14,11 +14,16 @@ const Login = (props) => {
   useEffect(() => {
     async function authenticate() {
       try {
+        console.log("awaiting logged in user");
         const [httpStatus, user] = await authService.checkLoggedIn();
-        if (httpStatus == 200) {
+        console.log("Waiting finished, login was...");
+        if (httpStatus === 200) {
+          console.log("Successfull");
           props.setHomeUser(user);
         }
-      } catch (error) {}
+      } catch (error) {
+        console.log("Error occured: ", error);
+      }
     }
 
     authenticate();
@@ -26,17 +31,18 @@ const Login = (props) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const user = await authService.Login(
+    const response = await authService.Login(
       document.querySelector("#loginEmail").value,
       document.querySelector("#loginPassword").value
     );
-    if (user === "") {
+    if (response.status !== 200) {
       document.querySelector("#errorMsg").innerHTML =
         "Invalid username or password";
     } else {
-      props.setHomeUser(user);
+      props.setHomeUser(response.data);
     }
   };
+
   return (
     <div>
       <Row>

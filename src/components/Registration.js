@@ -16,12 +16,36 @@ const Registration = (props) => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    await authService.Registration(
+    const password = document.querySelector("#password").value;
+    if (!isValidPassword(password)) {
+      console.log(document.querySelector("#password").style);
+      document.querySelector("#password").style.border = "1px solid red";
+      document.querySelector("#errorMsg").innerHTML =
+        "Invalid password! It should contain at least one digit, one upper and lower case letter, and one of the following special characters: !@#$%&*()-+=^";
+      document.querySelector("#errorMsg").style.color = "red";
+      return;
+    } else {
+      document.querySelector("#password").style.border = "";
+      document.querySelector("#errorMsg").innerHTML = "";
+      document.querySelector("#errorMsg").style.color = "";
+    }
+    const resp = await authService.Registration(
       document.querySelector("#username").value,
       document.querySelector("#email").value,
-      document.querySelector("#password").value
+      password
     );
-    history.push("/");
+    if (resp.status !== 200) {
+      document.querySelector("#errorMsg").innerHTML = resp.data;
+      document.querySelector("#errorMsg").style.color = "red";
+    } else {
+      history.push("/");
+    }
+  };
+
+  const isValidPassword = (input) => {
+    return /(?=[A-Za-z0-9@!@#$%&*()\-+=^]+$)^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%&*()\-+=^]).*$/.test(
+      String(input)
+    );
   };
 
   return (
@@ -67,7 +91,8 @@ const Registration = (props) => {
               Registration
             </Button>
           </Form>
-          or <Link to={"/"}>Login</Link>.
+          or <Link to={"/"}>Login</Link>
+          <p id="errorMsg"></p>
         </Col>
       </Row>
     </Container>
