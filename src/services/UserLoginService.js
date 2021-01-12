@@ -12,7 +12,10 @@ export default class UserLoginService {
       })
       .then((response) => {
         this.__saveJwt(response.data);
-        return response.data;
+        return response;
+      })
+      .catch((error) => {
+        return error.response;
       });
   }
 
@@ -24,34 +27,37 @@ export default class UserLoginService {
       })
       .then((response) => {
         this.__saveJwt(response.data);
-        return response.data;
+        return response;
+      })
+      .catch((error) => {
+        return error.response;
       });
   }
 
   async checkLoggedIn() {
-    const authorizationCookie = this.__getCookie('Authorization');
-    axios.defaults.headers.common['Authorization'] = authorizationCookie;
-    const jwt = authorizationCookie.substring('Bearer '.length);
+    const authorizationCookie = this.__getCookie("Authorization");
+    axios.defaults.headers.common["Authorization"] = authorizationCookie;
+    const jwt = authorizationCookie.substring("Bearer ".length);
     const response = await axios
       .get(`https://localhost:5001/api/user/login?jwt=${jwt}`)
-      .catch(e => e);
+      .catch((e) => e);
     return [response.status, response.data];
   }
 
   async logOut() {
     await axios.post(`https://localhost:5001/api/user/logout`, {
-        jwt: this.__getCookie('Authorization').substring('Bearer '.length),
+      jwt: this.__getCookie("Authorization").substring("Bearer ".length),
     });
-    delete(axios.defaults.headers.common['Authorization']);
-    this.__setCookie('Authorization', 0, 1);
+    delete axios.defaults.headers.common["Authorization"];
+    this.__setCookie("Authorization", 0, 1);
   }
 
   __saveJwt(payload) {
     const token = payload.jwt;
-    delete(payload.jwt);
+    delete payload.jwt;
     const tokenDetails = jwtDecode(token);
-    this.__setCookie('Authorization', `Bearer ${token}`, tokenDetails.exp);
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    this.__setCookie("Authorization", `Bearer ${token}`, tokenDetails.exp);
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   }
 
   __setCookie(name, value, expiresAt) {
@@ -62,14 +68,14 @@ export default class UserLoginService {
   __getCookie(cookieName) {
     const name = cookieName + "=";
     const decodedCookie = decodeURIComponent(document.cookie);
-    const ca = decodedCookie.split(';');
-    for(let i = 0; i < ca.length; i++) {
+    const ca = decodedCookie.split(";");
+    for (let i = 0; i < ca.length; i++) {
       let c = ca[i];
-      while (c.charAt(0) == ' ') {
+      while (c.charAt(0) === " ") {
         c = c.substring(1);
       }
 
-      if (c.indexOf(name) == 0) {
+      if (c.indexOf(name) === 0) {
         return c.substring(name.length, c.length);
       }
     }
