@@ -4,12 +4,14 @@ import { Link } from "react-router-dom";
 import LiveCardService from "../services/LiveCardService";
 import Loader from "./Loader";
 import Badge from "react-bootstrap/Badge";
+import { Button } from "react-bootstrap";
 
 const CardPage = (props) => {
   const cardService = new LiveCardService();
   const [isLoading, setIsLoading] = useState(true);
   const [prints, setPrints] = useState([]);
   const [card, setCard] = useState(null);
+  const [quantity, setQuantity] = useState(1);
   const textDisplayer = useRef();
   const mainPageRef = useRef();
   let symbols = [];
@@ -33,6 +35,14 @@ const CardPage = (props) => {
     }
   }
 
+  const decrease = () => {
+    setQuantity(quantity - 1);
+  };
+
+  const increase = () => {
+    setQuantity(quantity + 1);
+  };
+
   const setImage = () => {
     if (card.layout === "transform" || card.layout === "modal_dfc") {
       return (
@@ -55,14 +65,14 @@ const CardPage = (props) => {
       );
     } else {
       return (
-        <div class="imageCard">
+        <Col class="imageCard">
           <img
             id="cardFront"
             className="cardImage cardImageFront"
             src={card.imageUri}
             alt={card.name}
           ></img>
-        </div>
+        </Col>
       );
     }
   };
@@ -194,16 +204,33 @@ const CardPage = (props) => {
     });
   };
 
-  const returnDetails = () => {
+  const loadNewCard = () => {
+    setCard(null);
+    loadCardIfNotCached();
+  };
+
+  if (card === null) {
+    return (
+      <div id="mainPage" style={mainPage}>
+        <Container>
+          <Loader isLoading={isLoading}></Loader>
+        </Container>
+      </div>
+    );
+  } else if (props.match.params.id !== card.id) {
+    loadNewCard();
+  } else {
     for (let key in card.legalities) {
       if (card.legalities.hasOwnProperty(key)) {
         legalities.push(key);
         isCardLegalIn.push(card.legalities[key]);
       }
     }
+
     return (
       <Container>
         <Loader isLoading={isLoading}></Loader>
+
         <div id="mainPage" style={mainPage} ref={mainPageRef}>
           <div style={content}>
             {setImage()}
@@ -238,9 +265,20 @@ const CardPage = (props) => {
               ></div>
             </div>
           </div>
-
+          <div className="def-number-input number-input">
+            <button onClick={decrease} className="minus"></button>
+            <input
+              className="quantity"
+              name="quantity"
+              value={quantity}
+              onChange={() => console.log("change")}
+              type="number"
+            />
+            <button onClick={increase} className="plus"></button>
+          </div>
+          );
+          <Button className="mb-1">Add to Deck</Button>
           <Row>{setLegalities()}</Row>
-
           <table style={tableStyle}>
             <thead>
               <tr>
@@ -264,25 +302,6 @@ const CardPage = (props) => {
         </div>
       </Container>
     );
-  };
-
-  const loadNewCard = () => {
-    setCard(null);
-    loadCardIfNotCached();
-  };
-
-  if (card === null) {
-    return (
-      <div id="mainPage" style={mainPage}>
-        <Container>
-          <Loader isLoading={isLoading}></Loader>
-        </Container>
-      </div>
-    );
-  } else if (props.match.params.id !== card.id) {
-    loadNewCard();
-  } else {
-    return returnDetails();
   }
 };
 
