@@ -8,6 +8,7 @@ import HomePage from "./components/HomePage";
 import Registration from "./components/Registration";
 import UserLoginService from "./services/UserLoginService";
 import AdvancedSearch from "./components/AdvancedSearch";
+import DecksPage from "./components/DecksPage";
 
 const App = (props) => {
   const cardService = new LiveCardService();
@@ -36,6 +37,11 @@ const App = (props) => {
           render={(props) => (
             <AdvancedSearch cardService={cardService} match={props.match} />
           )}
+        ></Route>
+        <Route
+          key="decks"
+          path="/decks"
+          render={(props) => <DecksPage></DecksPage>}
         ></Route>
       </Router>
     </div>
