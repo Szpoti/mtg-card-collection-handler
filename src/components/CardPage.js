@@ -5,6 +5,11 @@ import LiveCardService from "../services/LiveCardService";
 import Loader from "./Loader";
 import Badge from "react-bootstrap/Badge";
 import { Button } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { Form } from "react-bootstrap";
+import { InputGroup } from "react-bootstrap";
+import { FormControl } from "react-bootstrap";
 
 const CardPage = (props) => {
   const cardService = new LiveCardService();
@@ -12,8 +17,10 @@ const CardPage = (props) => {
   const [prints, setPrints] = useState([]);
   const [card, setCard] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [deck, setDeck] = useState();
   const textDisplayer = useRef();
   const mainPageRef = useRef();
+
   let symbols = [];
   let legalities = [];
   let isCardLegalIn = [];
@@ -265,18 +272,36 @@ const CardPage = (props) => {
               ></div>
             </div>
           </div>
-          <div className="def-number-input number-input">
-            <button onClick={decrease} className="minus"></button>
-            <input
-              className="quantity"
-              name="quantity"
-              value={quantity}
-              onChange={() => console.log("change")}
-              type="number"
-            />
-            <button onClick={increase} className="plus"></button>
-          </div>
-          );
+          <Form>
+            <Form.Group>
+              <Form.Control
+                as="select"
+                onChange={(e) => {
+                  setDeck(e.target.value);
+                }}
+              >
+                <option value="Deck1">Deck name</option>
+                <option value="Deck2">Other deck name</option>
+                <option value="Deck3">Deck3</option>
+              </Form.Control>
+            </Form.Group>
+          </Form>
+          <InputGroup>
+            <InputGroup className="mb-3">
+              <InputGroup.Prepend>
+                <InputGroup.Text onClick={decrease}>
+                  <FontAwesomeIcon icon={faMinus} />
+                </InputGroup.Text>
+              </InputGroup.Prepend>
+              <FormControl value={quantity} />
+              <InputGroup.Append>
+                <InputGroup.Text onClick={increase}>
+                  <FontAwesomeIcon icon={faPlus} />
+                </InputGroup.Text>
+              </InputGroup.Append>
+            </InputGroup>
+          </InputGroup>
+
           <Button className="mb-1">Add to Deck</Button>
           <Row>{setLegalities()}</Row>
           <table style={tableStyle}>
