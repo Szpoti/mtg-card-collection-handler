@@ -9,10 +9,12 @@ import Registration from "./components/Registration";
 import UserLoginService from "./services/UserLoginService";
 import AdvancedSearch from "./components/AdvancedSearch";
 import DecksPage from "./components/DecksPage";
+import DeckService from "./services/DeckService";
 
 const App = (props) => {
   const cardService = new LiveCardService();
   const authService = new UserLoginService();
+  const deckService = new DeckService();
   return (
     <div>
       <Router>
@@ -41,7 +43,7 @@ const App = (props) => {
         <Route
           key="decks"
           path="/decks"
-          render={(props) => <DecksPage></DecksPage>}
+          render={(props) => <DecksPage deckService={deckService}></DecksPage>}
         ></Route>
       </Router>
     </div>
