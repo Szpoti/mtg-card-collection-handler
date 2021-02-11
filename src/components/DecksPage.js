@@ -6,6 +6,7 @@ import NewDeckModal from "./NewDeckModal";
 const DecksPage = (props) => {
   const [decks, setDecks] = useState({});
   const [show, setShow] = useState(false);
+  const [format, setFormat] = useState(1);
 
   useEffect(() => {});
 
@@ -15,13 +16,19 @@ const DecksPage = (props) => {
         <div>
           <Col className="h4 text-center">Your Decks</Col>
           <Button onClick={() => setShow(true)}>New deck</Button>
+          <p>{format}</p>
 
           {/*{decks.forEach((deck) => {
           return <Col>{deck.name}</Col>;
         })}*/}
         </div>
       </Row>
-      <NewDeckModal show={show} handleClose={() => setShow(false)} />
+      <NewDeckModal
+        format={format}
+        setFormat={setFormat}
+        show={show}
+        handleClose={() => setShow(false)}
+      />
     </Container>
   );
 };

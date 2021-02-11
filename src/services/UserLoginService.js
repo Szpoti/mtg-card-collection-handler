@@ -12,6 +12,7 @@ export default class UserLoginService {
       })
       .then((response) => {
         this.__saveJwt(response.data);
+        localStorage.setItem("userId", response.data.id);
         return response;
       })
       .catch((error) => {
@@ -27,6 +28,7 @@ export default class UserLoginService {
       })
       .then((response) => {
         this.__saveJwt(response.data);
+        localStorage.setItem("userId", response.data.id);
         return response;
       })
       .catch((error) => {
@@ -49,6 +51,8 @@ export default class UserLoginService {
       jwt: this.__getCookie("Authorization").substring("Bearer ".length),
     });
     delete axios.defaults.headers.common["Authorization"];
+    localStorage.removeItem("userId");
+
     this.__setCookie("Authorization", 0, 1);
   }
 
